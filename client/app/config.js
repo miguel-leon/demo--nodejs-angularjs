@@ -40,7 +40,9 @@ angular.module('Demo-NodeJS')
 					BASE: '/api',
 					AUTHENTICATE: '/api/authenticate',
 					USER_LIST: '/api/user_list',
-					USER: '/api/user'
+					USER: '/api/user',
+					PROFILE_LIST: '/api/profiles',
+					HOLDING_LIST: '/api/holdings'
 				}
 			},
 

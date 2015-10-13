@@ -6,10 +6,13 @@
     "name": "demodb",
     "username": "root",
     "password": "1234",
-    "options": {}
+    "options": {
+      "dialect": "mysql"
+    }
   },
   "providers": {
     "authentication": "jsonwebtoken",
-    "database": "sequelize"
+    "database": "sequelize",
+    "security": "bcrypt"
   }
 }

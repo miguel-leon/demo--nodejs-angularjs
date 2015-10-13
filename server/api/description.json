@@ -70,10 +70,10 @@
 		  "FAILURE CASES: missing data, duplicated user, nonexistent user, invalid password": {
 			"success": "false",
 			"user": "null",
-			"missingData": "{Boolean} true if required fields are missing",
+			"missingData": "{Boolean} true if id is missing",
 			"duplicatedUser": "{Boolean} true if unique fields already exist",
 			"nonexistentUser": "{Boolean} true if user does not exist",
-			"invalidPassword": "{Boolean} true if user previous password was invalid"
+			"invalidPassword": "{Boolean} true if user previous_password was invalid"
 		  }
 		}
 	  }
@@ -107,6 +107,12 @@
 	},
 	"/user_list": {
 	  "GET":{
+		"REQUEST": {
+		  "header":{
+			"start": "{Integer} [Optional] result offset start",
+			"limit": "{Integer} [Optional] maximum number of results"
+		  }
+		},
 		"RESPONSES": {
 		  "ON SUCCESS": {
 			"success": "true",
@@ -115,16 +121,35 @@
 		}
 	  }
 	},
+	"/profiles": {
+	  "GET":{
+		"RESPONSES": {
+		  "ON SUCCESS": {
+			"success": "true",
+			"profiles": "{Array} list of profiles"
+		  }
+		}
+	  }
+	},
+	"/holdings": {
+	  "GET":{
+		"RESPONSES": {
+		  "ON SUCCESS": {
+			"success": "true",
+			"profiles": "{Array} list of holdings"
+		  }
+		}
+	  }
+	},
 	"/... (ALL IMPLEMENTED ROUTES)": {
 	  "RESPONSES": {
-		"FAILURE CASE: unknown": {
-		  "status": 500,
-		  "success": "false"
+		"FAILURE CASE: unresolved": {
+		  "status": 500
 		}
 	  }
 	},
 	"/, /config": {
-	  "RESPONSE": "This JSON description with the API description"
+	  "RESPONSE": "This JSON with the API description"
 	}
   }
 }

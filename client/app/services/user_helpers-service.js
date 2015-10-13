@@ -38,35 +38,35 @@ angular.module('Demo-NodeJS.services')
 		// API actions reject handlers
 		isIncomplete: functionChainer(function (reason) {
 			if (reason[CONFIG.API_BAD_RESPONSES.USER.INCOMPLETE]) {
-				notification.push(CONFIG.NOTIFICATIONS.USER.INCOMPLETE);
+				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.INCOMPLETE);
 				return true;
 			}
 			return false;
 		}),
 		isDuplicated: functionChainer(function (reason) {
 			if (reason[CONFIG.API_BAD_RESPONSES.USER.DUPLICATED]) {
-				notification.push(CONFIG.NOTIFICATIONS.USER.DUPLICATED);
+				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.DUPLICATED);
 				return true;
 			}
 			return false;
 		}),
 		isNonexistent: functionChainer(function (reason) {
 			if (reason[CONFIG.API_BAD_RESPONSES.USER.NONEXISTENT]) {
-				notification.push(CONFIG.NOTIFICATIONS.USER.NONEXISTENT);
+				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.NONEXISTENT);
 				return true;
 			}
 			return false;
 		}),
 		isUndeletable: functionChainer(function (reason) {
 			if (reason[CONFIG.API_BAD_RESPONSES.USER.UNDELETABLE]) {
-				notification.push(CONFIG.NOTIFICATIONS.USER.UNDELETABLE);
+				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.UNDELETABLE);
 				return true;
 			}
 			return false;
 		}),
 		isInvalidPassword: functionChainer(function (reason) {
 			if (reason[CONFIG.API_BAD_RESPONSES.USER.INVALID_PASSWORD]) {
-				notification.push(CONFIG.NOTIFICATIONS.USER.INVALID_PASSWORD);
+				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.INVALID_PASSWORD);
 				return true;
 			}
 			return false;

@@ -19,7 +19,7 @@ angular.module('Demo-NodeJS.controllers')
 			},
 			function (reason) { // failure
 				if (reason.invalidCredentials) {
-					notification.push(CONFIG.NOTIFICATIONS.INVALID_CREDENTIALS);
+					notification.pushAndPop(CONFIG.NOTIFICATIONS.INVALID_CREDENTIALS);
 				}
 			});
 	};

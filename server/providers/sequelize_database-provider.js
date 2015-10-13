@@ -2,6 +2,7 @@
 
 // following variables must be set in the global scope at this point.
 // var CONFIG;
+// var ERRORS;
 
 var Sequelize = global.Sequelize = require("sequelize");
 var sequelize = global.sequelize = new Sequelize(CONFIG["database"]["name"],
@@ -20,93 +21,70 @@ module.exports = {
 		list: function (limit, start) {
 			return models.User.findAll({limit: limit, offset: start});
 		},
+
 		find: function (fields) {
-			if (!fields.id) {
-				var where = {};
-				models.User.attributes.forEach(function (attr) {
-					if (!!fields[attr]) where[attr] = fields[attr];
-				});
-				return models.User.findOne({where: where});
-			}
+			if (!fields.id) return models.User.findOne({where: fields});
 			return models.User.findById(fields.id);
 		},
+
 		create: function (user) {
 			return models.User.create(user).then(
-				null,
+				null, // success handler managed elsewhere
 				function (reason) {
-					console.log(reason);
-					return reason;
+					if (reason instanceof Sequelize.UniqueConstraintError) throw ERRORS.DUPLICATED_USER;
+					if (reason instanceof Sequelize.ValidationError) throw ERRORS.MISSING_DATA;
+					// Sequelize.ForeignKeyConstraintError may happen if client was hacked.
+					throw reason;
 				}
 			);
 		},
+
 		update: function (user) {
-			return models.User.update(user).then(
-				null,
+			var options = {
+				where: {id: user.id}
+			};
+			return models.User.update(user, options).then(
+				function (data) {
+					if (!data[0] /* affected rows count */) throw ERRORS.NONEXISTENT_USER;
+					return user;
+				},
 				function (reason) {
-					console.log(reason);
-					return reason;
+					if (reason instanceof Sequelize.UniqueConstraintError) throw ERRORS.DUPLICATED_USER;
+					// Sequelize.ForeignKeyConstraintError may happen if client was hacked.
+					throw reason;
 				}
 			);
 		},
 
-		/**
-		 * If <user.id> is not set, creates a new record in the database.
-		 * Otherwise updates the corresponding record if it exits.
-		 * @param {User} user
-		 * @returns {Promise.<User>} resolves with @arg user if the user was saved; null otherwise (nonexistent user).
-		 * @throws {Error}
-		 * @typedef Error
-		 * @property {boolean} missingData
-		 * @property {boolean} duplicatedUser
-		 */
-		save: function (user) {},
-
-		/**
-		 * Delete User records that match the properties in <fields>
-		 * @param {Object} fields
-		 * @returns {Promise.<User>} resolves with @arg user if the user was deleted; null otherwise (nonexistent user).
-		 */
-		delete: function (fields) {},
+		delete: function (fields) {
+			return models.User.destroy({where: fields}).then(
+				function (count) {
+					if (!count) throw ERRORS.NONEXISTENT_USER;
+					return fields;
+				}
+			);
+		},
 
 		/* NOT USED */
-		findAll: function (fields) {}
+		findAll: function (fields) {},
+		save: function (user) {}
 	},
-	/**
-	 * Data Access Object for Profiles
-	 */
+	/** @implements DatabaseProvider~Profile */
 	Profiles: {
-		/**
-		 * List all profiles
-		 * @param limit [optional]
-		 * @param start [optional]
-		 * @returns {Promise.<Profile[]>}
-		 */
-		list: function (limit, start) {},
+		list: function () {
+			return models.Profile.findAll();
+		},
 
-		/**
-		 * Return the profile that matches the properties in <fields>
-		 * @param {Object} fields
-		 * @returns {Promise.<Profile>} resolves with @arg profile if corresponding record exits; null otherwise.
-		 */
-		find: function (fields) {}
+		/* NOT USED */
+		find: function (id) {}
 	},
-	/**
-	 * Data Access Object for Holdings
-	 */
+	/** @implements DatabaseProvider~Holding */
 	Holdings: {
-		/**
-		 * List all holdings
-		 * @param limit [optional]
-		 * @param start [optional]
-		 * @returns {Promise.<Holding[]>}
-		 */
-		list: function (limit, start) {},
+		list: function () {
+			return models.Holding.findAll();
+		},
 
-		/**
-		 * Return the holding that matches the properties in <fields>
-		 * @param {Object} fields
-		 * @returns {Promise.<Holding>} resolves with @arg holding if corresponding record exits; null otherwise.
-		 */
-		find: function (fields) {}
+		/* NOT USED */
+		find: function (id) {}
 	}
 };

@@ -16,10 +16,14 @@ var CONFIG = global.CONFIG = JSON.parse(fs.readFileSync(path.join(__dirname, 'co
 
 var app = global.app = express();
 
-var providers = global.providers = {
-	authentication: require('./providers/' + CONFIG["providers"]["authentication"] + '_authentication-provider'),
-	database: require('./providers/' + CONFIG["providers"]["database"] + '_database-provider')
-};
+/**
+ * Load all providers in CONFIG["providers"].
+ * There must be: authentication, data and security providers.
+ */
+var providers = global.providers = {};
+Object.keys(CONFIG["providers"]).forEach(function (key) {
+	providers[key] = require('./providers/' + CONFIG["providers"][key] + '_' + key + '-provider');
+});
 
   //==============================//
  //            ROUTES            //
@@ -38,6 +42,12 @@ app.use('/api', require('./api/routes'));
 app.use(/[\s\S]*/, function (req, res) {
 	res.sendFile(path.join(clientDir, '/index.html'));
 });
+/*
+ * Express default error handler is added automatically at the end of the middleware stack.
+ * Set NODE_ENV=production to avoid sending the error stack trace to the client,
+ * since the client shouldn't receive details of server errors.
+ */
+
 
   //==============================//
  //           RUNNING            //

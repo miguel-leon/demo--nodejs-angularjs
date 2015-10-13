@@ -18,7 +18,7 @@ module.exports = {
 	 * @arg res - The response.
 	 */
 	/**
-	 * returns an Express Middleware that verifies there is an authenticated state using the request object.
+	 * Returns an Express Middleware that verifies there is an authenticated state using the request object.
 	 * This middleware may make modifications to the request object and call next() if authenticated;
 	 * Or invoke onFailure(err, req, res) otherwise.
 	 * @param {failureCallback} onFailure(err, req, res)

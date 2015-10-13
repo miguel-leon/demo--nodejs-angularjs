@@ -13,79 +13,92 @@ module.exports = {
 	Users: {
 		/**
 		 * List all users
-		 * @param limit [optional]
-		 * @param start [optional]
+		 * @param limit [Optional] maximum number of results
+		 * @param start [Optional] result offset start
 		 * @returns {Promise.<User[]>}
+		 * @throws
 		 */
 		list: function (limit, start) {},
-
 		/**
 		 * Return the user that matches the properties in <fields>
 		 * @param {Object} fields
 		 * @returns {Promise.<User>} resolves with @arg user if corresponding record exits; null otherwise.
+		 * @throws
 		 */
 		find: function (fields) {},
-
 		/**
-		 * If <user.id> is not set, creates a new record in the database.
-		 * Otherwise updates the corresponding record if it exits.
+		 * Creates a new record in the database.
 		 * @param {User} user
-		 * @returns {Promise.<User, Error>} resolves with @arg user if the user was saved; null otherwise (nonexistent user).
+		 * @returns {Promise.<User, Error>} resolves with @arg user if the user was created; null otherwise.
 		 * @throws {Error} reason
 		 * @typedef Error
 		 * @property {boolean} missingData
 		 * @property {boolean} duplicatedUser
+		 * @throws
 		 */
-		save: function (user) {},
-
+		create: function (user) {},
+		/**
+		 * Modifies an existing record in the database.
+		 * @param {User} user
+		 * @returns {Promise.<User, Error>} resolves with @arg user if the user was updated; null otherwise.
+		 * @throws {Error} reason
+		 * @typedef Error
+		 * @property {boolean} missingData
+		 * @property {boolean} duplicatedUser
+		 * @property {boolean} nonexistentUser
+		 * @property {boolean} invalidPassword
+		 * @throws
+		 */
+		update: function (user) {},
 		/**
 		 * Delete User records that match the properties in <fields>
 		 * @param {Object} fields
 		 * @returns {Promise.<User>} resolves with @arg user if the user was deleted; null otherwise (nonexistent user).
+		 * @throws
 		 */
 		delete: function (fields) {},
 
+
 		/* NOT USED */
+
+		/**
+		 * List users that match  the properties in <fields>
+		 */
 		findAll: function (fields) {},
-		create: function (user) {},
-		update: function (user) {}
+		/**
+		 * If <user.id> is not set, creates a new record in the database (method create).
+		 * Otherwise updates the corresponding record if it exits (method update).
+		 */
+		save: function (user) {}
 	},
 	/**
 	 * Data Access Object for Profiles
+	 * @interface DatabaseProvider~Profile
 	 */
 	Profiles: {
 		/**
 		 * List all profiles
-		 * @param limit [optional]
-		 * @param start [optional]
 		 * @returns {Promise.<Profile[]>}
+		 * @throws
 		 */
-		list: function (limit, start) {},
+		list: function () {},
 
-		/**
-		 * Return the profile that matches the properties in <fields>
-		 * @param {Object} fields
-		 * @returns {Promise.<Profile>} resolves with @arg profile if corresponding record exits; null otherwise.
-		 */
-		find: function (fields) {}
+		/* NOT USED */
+		find: function (id) {}
 	},
 	/**
 	 * Data Access Object for Holdings
+	 * @interface DatabaseProvider~Holding
 	 */
 	Holdings: {
 		/**
 		 * List all holdings
-		 * @param limit [optional]
-		 * @param start [optional]
 		 * @returns {Promise.<Holding[]>}
+		 * @throws
 		 */
-		list: function (limit, start) {},
+		list: function () {},
 
-		/**
-		 * Return the holding that matches the properties in <fields>
-		 * @param {Object} fields
-		 * @returns {Promise.<Holding>} resolves with @arg holding if corresponding record exits; null otherwise.
-		 */
-		find: function (fields) {}
+		/* NOT USED */
+		find: function (id) {}
 	}
 };

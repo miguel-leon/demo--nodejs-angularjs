@@ -25,6 +25,7 @@ module.exports = {
 	/**
 	 * @param {failureCallback} onFailure(err, req, res)
 	 * @returns {Middleware}
+	 * TODO: convert to returning a promise instead of a middleware
 	 */
 	verify: function (onFailure) {
 		return function (req, res, next) {
@@ -32,15 +33,15 @@ module.exports = {
 			var token = req.body.token || req.query.token || req.headers['x-access-token'];
 			if (token) {
 				jwt.verify(token, SECRET, function(err, decoded) {
-					if (err) {
+					if (!err) {
+						// if everything is good, save to request for use in other routes
+						req.decoded = decoded;
+						next();
+					} else {
 						if (typeof onFailure === 'function') onFailure({
 							error: err,
 							message: MESSAGES.INVALID_TOKEN
 						}, req, res);
-					} else {
-						// if everything is good, save to request for use in other routes
-						req.decoded = decoded;
-						next();
 					}
 				});
 			}
@@ -58,7 +59,7 @@ module.exports = {
 		return json;
 	},
 
-	// not used.
+	/* NOT USED */
 	deny: function (req, res) {
 	}
 };

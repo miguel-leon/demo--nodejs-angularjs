@@ -10,6 +10,11 @@ function (CONFIG, $scope, $location, serverAPI, login, userHelpers, notification
 	$scope.undeletable = login.disallowedDeletionFor;
 
 	// Run
+	serverAPI.Profiles.list().then(
+		function (data) {
+			$scope olhoih
+		}
+	);
 	serverAPI.Users.list().then(function (data) { // success
 		$scope.users = data.users;
 	}); // no failure other than unauthorized, handled by server api service

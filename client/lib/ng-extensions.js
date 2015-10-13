@@ -13,10 +13,11 @@ angular.module('ngExtensions', [])
 		restrict: 'A',
 		link: function (scope, element, attr) {
 			var deregister = scope.$watch(attr.ngextRemoveElementIf, function(newValue, oldValue) {
-				if (newValue === undefined) return;
-				if (newValue) element.remove();
-				else element.removeAttr(attr.$attr.ngextRemoveElementIf);
-				deregister();
+				if (newValue === true) element.remove();
+				else if (newValue === false) {
+					element.removeAttr(attr.$attr.ngextRemoveElementIf);
+					deregister();
+				}
 			});
 		}
 	}

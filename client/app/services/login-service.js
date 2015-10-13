@@ -42,7 +42,7 @@ angular.module('Demo-NodeJS.services')
 		 * @returns {boolean}
 		 */
 		disallowedDeletionFor: function (id) {
-			return !id || id === loggedUser().id;
+			return !id || id == loggedUser().id;
 		},
 
 		headersConfig: function () {
