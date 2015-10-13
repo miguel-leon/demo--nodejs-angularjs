@@ -1,0 +1,130 @@
+{
+  "ROUTES": {
+	"/... (IMPLEMENTED ROUTES)": {
+	  "EXCLUDING": {
+		"/authenticate": "method: POST",
+		"/user": "method: POST"
+	  },
+	  "REQUEST": {
+		"header":{
+		  "x-access-token": "{String} authentication token"
+		}
+	  },
+	  "RESPONSES": {
+		"FAILURE CASE: failed authentication": {
+		  "status": 403,
+		  "success": "false",
+		  "unauthorized": "true"
+		}
+	  }
+	},
+	"/authenticate": {
+	  "POST": {
+		"REQUEST": {
+		  "body": {
+			"email": "user credentials: email",
+			"password": "user credentials: password"
+		  }
+		},
+		"RESPONSES": {
+		  "ON SUCCESS": {
+			"success": "true",
+			"user": "{JSON} authenticated user information",
+			"token": "{String} authentication token"
+		  },
+		  "FAILURE CASE: invalid credentials": {
+			"success": "false",
+			"user": "null",
+			"invalidCredentials": "true"
+		  }
+		}
+	  }
+	},
+	"/user": {
+	  "POST": {
+		"REQUEST": {
+		  "body": "{JSON} user information"
+		},
+		"RESPONSES": {
+		  "ON SUCCESS": {
+			"success": "true",
+			"user": "{JSON} created user information"
+		  },
+		  "FAILURE CASES: missing data, duplicated user": {
+			"success": "false",
+			"user": "null",
+			"missingData": "{Boolean} true if required fields are missing",
+			"duplicatedUser": "{Boolean} true if unique fields already exist"
+		  }
+		}
+	  },
+	  "PUT": {
+		"REQUEST": {
+		  "body": "{JSON} user information (including id)"
+		},
+		"RESPONSES": {
+		  "ON SUCCESS": {
+			"success": "true",
+			"user": "{JSON} modified user information"
+		  },
+		  "FAILURE CASES: missing data, duplicated user, nonexistent user, invalid password": {
+			"success": "false",
+			"user": "null",
+			"missingData": "{Boolean} true if required fields are missing",
+			"duplicatedUser": "{Boolean} true if unique fields already exist",
+			"nonexistentUser": "{Boolean} true if user does not exist",
+			"invalidPassword": "{Boolean} true if user previous password was invalid"
+		  }
+		}
+	  }
+	},
+	"/user/:id": {
+	  "GET": {
+		"RESPONSES": {
+		  "ON SUCCESS": {
+			"success": "true",
+			"user": "{JSON} requested user information"
+		  },
+		  "FAILURE CASE: nonexistent user": {
+			"success": "false",
+			"user": "null",
+			"nonexistentUser": "true"
+		  }
+		}
+	  },
+	  "DELETE": {
+		"RESPONSES": {
+		  "ON SUCCESS": {
+			"success": "true"
+		  },
+		  "FAILURE CASES: nonexistent user, user couldn't be deleted": {
+			"success": "false",
+			"nonexistentUser": "{Boolean} true if user does not exist",
+			"unableToDelete": "{Boolean} true if trying to delete logged user"
+		  }
+		}
+	  }
+	},
+	"/user_list": {
+	  "GET":{
+		"RESPONSES": {
+		  "ON SUCCESS": {
+			"success": "true",
+			"users": "{Array} list of users"
+		  }
+		}
+	  }
+	},
+	"/... (ALL IMPLEMENTED ROUTES)": {
+	  "RESPONSES": {
+		"FAILURE CASE: unknown": {
+		  "status": 500,
+		  "success": "false"
+		}
+	  }
+	},
+	"/, /config": {
+	  "RESPONSE": "This JSON description with the API description"
+	}
+  }
+}

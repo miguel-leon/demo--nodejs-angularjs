@@ -1,80 +1,50 @@
 'use strict';
 
-var authentication = require('./authentication');
+// Following variables must be set in the global scope at this point.
+// var express = require('express');
+// var path = require('path');
 
-// variable <express> is already set in the global scope at this point.
-//var express = require('express');
+var authentication = require('./authentication'); // authentication middlewares
+var api = require('./api'); // API middlewares
 var router = express.Router();
 
-function returnPublicConfig(req, res) {
-	res.json(CONFIG["public"])
-}
-
-router.get('/', returnPublicConfig);
-router.get('/config', returnPublicConfig);
-
-// Attempt login, verify credentials.
+  //==============================//
+ //            ROUTES            //
+//==============================//
+/** Middleware for public description of the API */
+router.get('/', returnDescription);
+router.get('/config', returnDescription);
+/** Middleware for Attempting login, verify credentials */
 router.post('/authenticate', authentication.attempt);
-
-router.post('/user', function (req, res) {
-	try {
-		delete req.body.id; // in case of client hacked
-		var user = providers.database.Users.save(req.body);
-	}
-	catch (err) {
-		err.success = false;
-		err.user = null;
-		return res.json(err);
-	}
-	res.json({success: true, user: user});
-});
-
-// Verify authentication token before further access to the API.
-router.use(authentication.restrict);
-
-// Get the list of users.
-router.get('/user_list', function (req, res) {
-	var users = providers.database.Users.list();
-	res.json({success: true, users: users});
-});
-
-// Get a single user data.
-router.get('/user/:id', function (req, res) {
-	var user = providers.database.Users.find({id: req.params.id});
-	if (!user) res.json({success: false, user: null, nonexistentUser: true});
-	else res.json({success: true, user: user});
-});
-
-// Put data to modify an existing user in database.
-router.put('/user', function (req, res) {
-	try {
-		req.body.id = req.body.id || '-'; // in case of client hacked
-		var user = providers.database.Users.save(req.body);
-	}
-	catch (err) {
-		err.success = false;
-		err.user = null;
-		return res.json(err);
-	}
-	if (!user) res.json({success: false, user: null, nonexistentUser: true});
-	else res.json({success: true, user: user});
-});
-
-// Delete an existing user in database. Must have different id than the authenticated user.
-router.delete('/user/:id', function (req, res) {
-	if (req.params.id == req.decoded.id) return res.json({success:false, unableToDelete: true});
-	var user = providers.database.Users.delete({id: req.params.id});
-	if (!user) return res.json({success:false, nonexistentUser: true});
-	res.json({success: true});
-});
-
-
-
+/** Middleware for creating new user */
+router.post('/user', api.createUser);
+/** Middleware for verifying authentication before further access to the API */
+//router.use(authentication.restrict);
+/** Middleware for retrieving the list of users */
+router.get('/user_list', api.getUserList);
+/** Middleware for retrieving a single user data */
+router.get('/user/:id', api.getUser);
+/** Middleware to modify an existing user */
+router.put('/user', api.updateUser);
+/** Middleware for deleting an existing user in database. Must be other than the authenticated user */
+router.delete('/user/:id', api.deleteUser);
+/** Testing API with logged user */
 router.use('/who', function (req, res) {
 	res.json({ message: 'API accessed.', auth: req.decoded });
 });
+/** Middleware for any other unhandled route */
+router.use(returnDescription);
 
-router.use(returnPublicConfig);
 
-// returns a router
+  //==============================//
+ //        EXPORT ROUTER         //
+//==============================//
 module.exports = router;
+
+
+  //==============================//
+ //      HOISTED FUNCTIONS       //
+//==============================//
+function returnDescription(req, res) {
+	res.sendFile(path.join(__dirname, 'description.json'));
+}

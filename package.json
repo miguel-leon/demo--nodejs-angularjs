@@ -1,18 +1,24 @@
 {
-  "name": "demo-nodejs-angularjs",
+  "name": "demo--nodejs-angularjs",
   "version": "0.0.1",
   "description": "Demostración de técnicas de desarrollo en NodeJS y AngularJS",
-  "main": "server.js",
-  "dependencies": {
-    "body-parser": "^1.13.3",
-    "express": "^4.13.3",
-    "jsonwebtoken": "^5.0.5"
-  },
-  "devDependencies": {},
+  "author": "Miguel Leon <miguel.e.leon.f@gmail.com>",
   "scripts": {
     "start": "node server/server.js"
   },
-  "repository": "",
-  "author": "Miguel Leon",
-  "license": ""
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/miguel-leon/demo--nodejs-angularjs.git"
+  },
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
+    "jsonwebtoken": "^5.0.5",
+    "mysql": "^2.9.0",
+    "sequelize": "^3.9.0"
+  },
+  "devDependencies": {},
+  "private": true,
+  "license": "UNLICENSED"
 }
