@@ -1,0 +1,16 @@
+<nav class="navbar" role="navigation">
+	<ul class="nav nav-tabs">
+		<li ng-class="{ active: current.path[ROUTES.USER_LIST] }">
+			<a ng-href="{{ROUTES.USER_LIST}}">User List</a>
+		</li>
+		<li ng-class="{ active: current.path[ROUTES.USER] }">
+			<a ng-href="{{ROUTES.USER}}">User Form</a>
+		</li>
+		<li class="pull-right">
+			<ul class="nav navbar-nav">
+				<li style="padding-right: 15px; "><p><strong>Welcome, {{current.user.name}}</strong></p></li>
+				<li><button class="column btn btn-default" ng-click="logout()">Log out</button></li>
+			</ul>
+		</li>
+	</ul>
+</nav>

@@ -1,0 +1,28 @@
+<h2>User list</h2>
+
+<div ng-include="NOTIFICATION_ALERT_PATH"></div>
+
+<table class="table">
+	<tr>
+		<th class="col-sm-3">Name</th>
+		<th class="col-sm-3">Last Name</th>
+		<th class="col-sm-4">E-mail</th>
+		<th class="col-sm-1"></th>
+		<th class="col-sm-1"></th>
+	</tr>
+	<tr ng-repeat="user in users">
+		<td>{{ user.name }}</td>
+		<td>{{ user.last_name }}</td>
+		<td>{{ user.email }}</td>
+		<td><button class="btn btn-info" ng-click="edit($index, user.id)">Edit</button></td>
+		<td>
+			<button class="btn btn-danger" ngext-remove-element-if="undeletable(user.id)"
+					ng-click="delete($index, user.id)">Delete</button>
+		</td>
+	</tr>
+</table>
+
+<div class="footer">
+	<button type="button" class="btn btn-default" ng-click="register()">
+		Register user</button>
+</div>

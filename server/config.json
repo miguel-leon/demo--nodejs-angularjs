@@ -1,0 +1,114 @@
+{
+  "server": {
+	"port": 3000
+  },
+  "public": {
+    "RESPONSES": {
+      "/authenticate": {
+        "REQUEST": {
+          "body": "{JSON} user credentials"
+        },
+        "POST": {
+          "SUCCESS": {
+            "success": "{Boolean} true",
+            "user": "{JSON} authenticated user information",
+            "token": "{String} authentication token"
+          },
+          "FAILURE": {
+            "success": "{Boolean} false",
+            "user": "{null}",
+            "invalidCredentials": "{Boolean} true"
+          }
+        }
+      },
+      "/...": {
+        "EXCEPT": {
+          "/user": "POST"
+        },
+        "FAILURE": {
+          "status": 403,
+          "success": "{Boolean} false",
+          "unauthorized": "{Boolean} true"
+        }
+      },
+      "/user": {
+        "POST": {
+          "REQUEST": {
+            "body": "user information"
+          },
+          "SUCCESS": {
+            "success": "{Boolean} true",
+            "user": "{JSON} created user information"
+          },
+          "FAILURE": {
+            "success": "{Boolean} false",
+            "user": "{null}",
+            "missingData": "{Boolean} true if required fields are missing",
+            "duplicatedUser": "{Boolean} true if unique fields already exist"
+          }
+        },
+        "PUT": {
+          "REQUEST": {
+            "header": {
+              "x-access-token": "{String} authentication token"
+            },
+            "body": "user information including id"
+          },
+          "SUCCESS": {
+            "success": "{Boolean} true",
+            "user": "{JSON} modified user information"
+          },
+          "FAILURE": {
+            "success": "{Boolean} false",
+            "user": "{null}",
+            "missingData": "{Boolean} true if required fields are missing",
+            "duplicatedUser": "{Boolean} true if unique fields already exist",
+            "nonexistentUser": "{Boolean} true if user does not exist",
+            "invalidPassword": "{Boolean} true if user previous password was invalid."
+          }
+        }
+      },
+      "/user/:id": {
+        "REQUEST": {
+          "header": {
+            "x-access-token": "{String} authentication token"
+          }
+        },
+        "GET": {
+          "SUCCESS": {
+            "success": "{Boolean} true",
+            "user": "{JSON} requested user information"
+          },
+          "FAILURE": {
+            "success": "{Boolean} false",
+            "user": "{null}",
+            "nonexistentUser": "{Boolean} true"
+          }
+        },
+        "DELETE": {
+          "SUCCESS": {
+            "success": "{Boolean} true"
+          },
+          "FAILURE": {
+            "success": "{Boolean} false",
+            "nonexistentUser": "{Boolean} true if user does not exist",
+            "unableToDelete": "{Boolean} true if user couldn't be deleted"
+          }
+        }
+      },
+      "/user_list": {
+        "REQUEST": {
+          "header": {
+            "x-access-token": "{String} authentication token"
+          }
+        },
+        "GET": {
+          "SUCCESS": {
+            "success": "{Boolean} true",
+            "users": "{Array} list of users."
+          }
+        }
+      }
+    }
+  }
+}

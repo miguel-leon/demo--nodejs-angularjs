@@ -1,3 +1,18 @@
+commit-message.txt
+
+
+# Client third-party libraries
+client/vendor/bootstrap*/*
+!client/vendor/bootstrap*/css/
+client/vendor/bootstrap*/css/*
+!client/vendor/bootstrap*/css/bootstrap.css
+
+client/vendor/angular*/*
+!client/vendor/angular*/angular.js
+!client/vendor/angular*/angular-route.js
+
+
+
 # Logs
 logs
 *.log

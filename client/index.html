@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Demo-NodeJS">
+<head>
+	<meta charset="UTF-8">
+	<title>Demo - development with NodeJS and AngularJS</title>
+
+	<!-- TODO: change dynamically between CDN and local versions of third party libraries -->
+	<!-- Bootstrap compiled and minified >
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<!-- -->
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap-3.3.5-dist/css/bootstrap.css">
+
+	<base href="/">
+</head>
+<body>
+	<div class="page-header">
+		<div class="container"><h1>Demo NodeJS and AngularJS</h1></div>
+	</div>
+
+	<div ng-include="current.header"></div>
+
+	<div class="container" ng-view></div>
+
+	<!-- AngularJS -->
+	<!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script-->
+	<!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script-->
+	<script src="./vendor/angular-1.4.4/angular.js"></script>
+	<script src="./vendor/angular-1.4.4/angular-route.js"></script>
+
+	<script src="lib/ng-extensions.js"></script>
+	<script src="lib/function_chainer.js"></script>
+	<!-- TODO: add dependency loader -->
+	<script src="app/app.js"></script>
+	<script src="app/config.js"></script>
+	<script src="app/controllers/login-controller.js"></script>
+	<script src="app/controllers/user_list-controller.js"></script>
+	<script src="app/controllers/user-controller.js"></script>
+	<script src="app/services/login-service.js"></script>
+	<script src="app/services/storage-service.js"></script>
+	<script src="app/services/server_api-service.js"></script>
+	<script src="app/services/broadcast_factory-service.js"></script>
+	<script src="app/services/notification-service.js"></script>
+	<script src="app/services/user_helpers-service.js"></script>
+</body>
+</html>
