@@ -2,7 +2,7 @@
 
 // following variables must be set in the global scope at this point.
 // var providers;
-// var ERRORS
+var api_errors = global.api_errors = require('./api-errors');
 
 /**
  * module.exports middlewares for server api.
@@ -29,7 +29,7 @@ module.exports = {
 	getUser: function (req, res, next) {
 		providers.database.Users.find({id: req.params.id}).then(
 			function (user) {
-				if (!user) rejectClient(res, ERRORS.NONEXISTENT_USER);
+				if (!user) rejectClient(res, api_errors.NonexistentUserError);
 				else successHandlerFor('user', res)(stripPasswordFromUserResponse(user));
 			},
 			next
@@ -40,7 +40,7 @@ module.exports = {
 	 */
 	createUser: function (req, res, next) {
 		delete req.body.id; // in case of client hacked
-		if (!req.body.password) return rejectClient(res, ERRORS.MISSING_DATA);
+		if (!req.body.password) return rejectClient(res, api_errors.MissingDataError);
 		providers.security.hash(req.body.password).then(
 			function (hash) {
 				req.body.password = hash;
@@ -55,7 +55,7 @@ module.exports = {
 	 * Middleware for modifying an existing user.
 	 */
 	updateUser: function (req, res, next) {
-		if (!req.body.id) return rejectClient(res, ERRORS.MISSING_DATA); // client hacked
+		if (!req.body.id) return rejectClient(res, api_errors.MissingDataError); // client hacked
 		if (!req.body.password) { // if it didn't require a change of password
 			providers.database.Users.update(req.body).then( // update the user right away
 				successHandlerFor('user', res, stripPasswordFromUserResponse),
@@ -64,11 +64,11 @@ module.exports = {
 		}
 		else { // else, if required to change password
 			// check if the current password was sent
-			if (!req.body.previous_password) rejectClient(res, ERRORS.INVALID_PASSWORD);
+			if (!req.body.previous_password) rejectClient(res, api_errors.InvalidPasswordError);
 			// then find the user
 			else providers.database.Users.find({id: req.body.id}).then(
 				function (user) {
-					if (!user) throw ERRORS.NONEXISTENT_USER;
+					if (!user) throw api_errors.NonexistentUserError;
 					// and verify that the passwords match
 					return providers.security.compare(req.body.previous_password, user.password);
 				}
@@ -77,7 +77,7 @@ module.exports = {
 					delete req.body.previous_password;
 					// if the passwords match
 					if (same) return providers.security.hash(req.body.password); // hash new password
-					throw ERRORS.INVALID_PASSWORD;
+					throw api_errors.InvalidPasswordError;
 				}
 			).then(
 				function (hash) {
@@ -94,7 +94,7 @@ module.exports = {
 	 * Middleware for deleting an existing user in database. Must be other than the authenticated user.
 	 */
 	deleteUser: function (req, res, next) {
-		if (req.params.id == req.decoded.id) return rejectClient(res, ERRORS.UNABLE_TO_DELETE);
+		if (req.params.id == req.decoded.id) return rejectClient(res, api_errors.UnableToDeleteError);
 		providers.database.Users.delete({id: req.params.id}).then(
 			successHandlerFor('users', res),
 			rejectionIdentifierHandler(res, next)
@@ -157,8 +157,7 @@ function rejectClient(res, reason) {
  */
 function rejectionIdentifierHandler(res, next) {
 	return function (reason) {
-		if (reason.user === null) rejectClient(res, reason); // known reason, user was set to null.
-		// TODO: change to using classes and inheritance checking for known in errors in <reason>.
+		if (api_errors.isKnown(reason)) rejectClient(res, reason);
 		else next(reason); // unknown reason
 	}
 }

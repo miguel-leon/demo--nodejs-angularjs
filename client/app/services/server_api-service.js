@@ -7,8 +7,8 @@ angular.module('Demo-NodeJS.services')
 
 	// Caches for profiles and holdings
 	var cache = {
-		profiles: {},
-		holdings: {}
+		profiles: null,
+		holdings: null
 	};
 
 	// All methods returns Promises
@@ -71,14 +71,21 @@ angular.module('Demo-NodeJS.services')
 		return emptyPromise; // return of empty promise, halts the promise chain.
 	}
 
-	function cachedListFor(key, route) {
+	function convertToArrayLikeWithId(arr) {
+		return arr.reduce(function (arraylike, item) {
+			arraylike[item.id] = item;
+			return arraylike;
+		}, {});
+	}
+
+	function cachedListFor(key, route, filter) {
 		if (!cache[key]) {
 			return $http.get(route, login.headersConfig()).then(
 				handleAcceptedAPIRequest,
 				handleRejectedAPIRequest
 			).then(
 				function (data) {
-					cache[key] = data[key];
+					cache[key] = (!filter)? data[key]: filter(data[key]);
 					return data;
 				}
 			);

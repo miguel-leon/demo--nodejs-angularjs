@@ -6,7 +6,6 @@
 
 var authentication = require('./authentication'); // authentication middlewares
 var api = require('./api'); // API middlewares
-var ERRORS = global.ERRORS = require('./definitions/error-definitions');
 var router = express.Router();
 
   //==============================//

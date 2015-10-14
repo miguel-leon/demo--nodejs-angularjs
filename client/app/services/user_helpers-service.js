@@ -2,17 +2,16 @@
 
 angular.module('Demo-NodeJS.services')
 
-.factory('userHelpers', function (CONFIG, functionChainer, notification, broadcastFactory, login) {
-	/**
-	 * Specific broadcast for "user" key. Used to persist an user object between controllers.
-	 * It inherit the functionality from broadcastFactory
-	 */
-	var userBroadcast = broadcastFactory('user');
+.factory('userHelpers', function (CONFIG, functionChainer, notification, Broadcast, login) {
+	var broadcast = new Broadcast(['user', 'profiles', 'holdings']);
 
 	return {
-		broadcast: userBroadcast,
+		broadcast: broadcast,
 
 		// API actions success handlers
+		publishFromResponse: publishFromResponseFunctionFor('user'),
+		publishProfilesFromResponse: publishFromResponseFunctionFor('profiles'),
+		publishHoldingsFromResponse: publishFromResponseFunctionFor('holdings'),
 		modifyLoggedUser: functionChainer(function (data) {
 			if (data.user.id === login.loggedUser().id) {
 				notification.push(CONFIG.NOTIFICATIONS.USER.MODIFIED_LOGGED);
@@ -21,55 +20,52 @@ angular.module('Demo-NodeJS.services')
 			}
 			return false;
 		}),
-		publishFromResponse: functionChainer(function (data) {
-			userBroadcast.publish(data.user);
-		}),
 		// the following functions are used for pushing notifications.
-		asCreated: functionChainer(function () {
-			notification.push(CONFIG.NOTIFICATIONS.USER.CREATED);
-		}),
-		asModified: functionChainer(function () {
-			notification.push(CONFIG.NOTIFICATIONS.USER.MODIFIED);
-		}),
-		asDeleted: functionChainer(function () {
-			notification.push(CONFIG.NOTIFICATIONS.USER.DELETED);
-		}),
+		asCreated: pushNotificationFunction(CONFIG.NOTIFICATIONS.USER.CREATED),
+		asModified: pushNotificationFunction(CONFIG.NOTIFICATIONS.USER.MODIFIED),
+		asDeleted: pushNotificationFunction(CONFIG.NOTIFICATIONS.USER.DELETED),
 
 		// API actions reject handlers
-		isIncomplete: functionChainer(function (reason) {
-			if (reason[CONFIG.API_BAD_RESPONSES.USER.INCOMPLETE]) {
-				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.INCOMPLETE);
+		isIncomplete: rejectionHandlerAndNotificationFunction(
+			CONFIG.API_BAD_RESPONSES.USER.INCOMPLETE,
+			CONFIG.NOTIFICATIONS.USER.INCOMPLETE
+		),
+		isDuplicated: rejectionHandlerAndNotificationFunction(
+			CONFIG.API_BAD_RESPONSES.USER.DUPLICATED,
+			CONFIG.NOTIFICATIONS.USER.DUPLICATED
+		),
+		isNonexistent: rejectionHandlerAndNotificationFunction(
+			CONFIG.API_BAD_RESPONSES.USER.NONEXISTENT,
+			CONFIG.NOTIFICATIONS.USER.NONEXISTENT
+		),
+		isUndeletable: rejectionHandlerAndNotificationFunction(
+			CONFIG.API_BAD_RESPONSES.USER.UNDELETABLE,
+			CONFIG.NOTIFICATIONS.USER.UNDELETABLE
+		),
+		isInvalidPassword: rejectionHandlerAndNotificationFunction(
+			CONFIG.API_BAD_RESPONSES.USER.INVALID_PASSWORD,
+			CONFIG.NOTIFICATIONS.USER.INVALID_PASSWORD
+		)
+	};
+
+	// Hoisted functions
+	function publishFromResponseFunctionFor(key) {
+		return functionChainer(function (data) {
+			broadcast[key].publish(data[key]);
+		});
+	}
+	function pushNotificationFunction(notification) {
+		return functionChainer(function () {
+			notification.push(notification);
+		});
+	}
+	function rejectionHandlerAndNotificationFunction(bad_response, notification) {
+		return functionChainer(function (reason) {
+			if (reason[bad_response]) {
+				notification.pushAndPop(notification);
 				return true;
 			}
 			return false;
-		}),
-		isDuplicated: functionChainer(function (reason) {
-			if (reason[CONFIG.API_BAD_RESPONSES.USER.DUPLICATED]) {
-				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.DUPLICATED);
-				return true;
-			}
-			return false;
-		}),
-		isNonexistent: functionChainer(function (reason) {
-			if (reason[CONFIG.API_BAD_RESPONSES.USER.NONEXISTENT]) {
-				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.NONEXISTENT);
-				return true;
-			}
-			return false;
-		}),
-		isUndeletable: functionChainer(function (reason) {
-			if (reason[CONFIG.API_BAD_RESPONSES.USER.UNDELETABLE]) {
-				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.UNDELETABLE);
-				return true;
-			}
-			return false;
-		}),
-		isInvalidPassword: functionChainer(function (reason) {
-			if (reason[CONFIG.API_BAD_RESPONSES.USER.INVALID_PASSWORD]) {
-				notification.pushAndPop(CONFIG.NOTIFICATIONS.USER.INVALID_PASSWORD);
-				return true;
-			}
-			return false;
-		})
+		});
 	}
 });

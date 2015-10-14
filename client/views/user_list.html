@@ -4,9 +4,11 @@
 
 <table class="table">
 	<tr>
-		<th class="col-sm-3">Name</th>
-		<th class="col-sm-3">Last Name</th>
+		<th class="col-sm-2">Name</th>
+		<th class="col-sm-2">Last Name</th>
 		<th class="col-sm-4">E-mail</th>
+		<th class="col-sm-1">Profile</th>
+		<th class="col-sm-1">Holding</th>
 		<th class="col-sm-1"></th>
 		<th class="col-sm-1"></th>
 	</tr>
@@ -14,6 +16,8 @@
 		<td>{{ user.name }}</td>
 		<td>{{ user.last_name }}</td>
 		<td>{{ user.email }}</td>
+		<td>{{ user.profile.name }}</td>
+		<td>{{ user.holding.name }}</td>
 		<td><button class="btn btn-info" ng-click="edit($index, user.id)">Edit</button></td>
 		<td>
 			<button class="btn btn-danger" ngext-remove-element-if="undeletable(user.id)"

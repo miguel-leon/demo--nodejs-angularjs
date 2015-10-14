@@ -2,7 +2,7 @@
 
 // following variables must be set in the global scope at this point.
 // var CONFIG;
-// var ERRORS;
+// var api_errors;
 
 var Sequelize = global.Sequelize = require("sequelize");
 var sequelize = global.sequelize = new Sequelize(CONFIG["database"]["name"],
@@ -31,8 +31,8 @@ module.exports = {
 			return models.User.create(user).then(
 				null, // success handler managed elsewhere
 				function (reason) {
-					if (reason instanceof Sequelize.UniqueConstraintError) throw ERRORS.DUPLICATED_USER;
-					if (reason instanceof Sequelize.ValidationError) throw ERRORS.MISSING_DATA;
+					if (reason instanceof Sequelize.UniqueConstraintError) throw api_errors.DuplicatedUserError;
+					if (reason instanceof Sequelize.ValidationError) throw api_errors.MissingDataError;
 					// Sequelize.ForeignKeyConstraintError may happen if client was hacked.
 					throw reason;
 				}
@@ -45,11 +45,11 @@ module.exports = {
 			};
 			return models.User.update(user, options).then(
 				function (data) {
-					if (!data[0] /* affected rows count */) throw ERRORS.NONEXISTENT_USER;
+					if (!data[0] /* affected rows count */) throw api_errors.NonexistentUserError;
 					return user;
 				},
 				function (reason) {
-					if (reason instanceof Sequelize.UniqueConstraintError) throw ERRORS.DUPLICATED_USER;
+					if (reason instanceof Sequelize.UniqueConstraintError) throw api_errors.DuplicatedUserError;
 					// Sequelize.ForeignKeyConstraintError may happen if client was hacked.
 					throw reason;
 				}
@@ -59,7 +59,7 @@ module.exports = {
 		delete: function (fields) {
 			return models.User.destroy({where: fields}).then(
 				function (count) {
-					if (!count) throw ERRORS.NONEXISTENT_USER;
+					if (!count) throw api_errors.NonexistentUserError;
 					return fields;
 				}
 			);
