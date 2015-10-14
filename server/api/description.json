@@ -3,7 +3,9 @@
 	"/... (IMPLEMENTED ROUTES)": {
 	  "EXCLUDING": {
 		"/authenticate": "method: POST",
-		"/user": "method: POST"
+		"/user": "method: POST",
+		"/profiles": "method: GET",
+		"/holdings": "method: GET"
 	  },
 	  "REQUEST": {
 		"header":{

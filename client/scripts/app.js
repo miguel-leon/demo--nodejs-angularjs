@@ -2,8 +2,10 @@
 
 angular.module('Demo-NodeJS.controllers', []);
 angular.module('Demo-NodeJS.services', ['Lib']);
+angular.module('Demo-NodeJS.directives', []);
 
-angular.module('Demo-NodeJS', ['Demo-NodeJS.controllers', 'Demo-NodeJS.services', 'ngRoute'])
+angular.module('Demo-NodeJS',
+	['Demo-NodeJS.controllers', 'Demo-NodeJS.services', 'Demo-NodeJS.directives', 'ngRoute'])
 
 .config(function (CONFIG, $routeProvider, $locationProvider) {
 	// TODO: fix uncaught exception (URIError: URI malformed) thrown by decodeURIComponent in AngularJS
@@ -12,9 +14,9 @@ angular.module('Demo-NodeJS', ['Demo-NodeJS.controllers', 'Demo-NodeJS.services'
 	var APP_ROUTES = CONFIG.ROUTES.APP;
 	$routeProvider
 		.when(APP_ROUTES.BASE, { redirectTo: CONFIG.ROUTES.UNAUTHENTICATED_ENTRY })
-		.when(APP_ROUTES.LOGIN,	{ templateUrl: CONFIG.VIEWS[APP_ROUTES.LOGIN], controller: 'LoginController' })
-		.when(APP_ROUTES.USER + '\/:id?', { templateUrl: CONFIG.VIEWS[APP_ROUTES.USER], controller: 'UserController' })
-		.when(APP_ROUTES.USER_LIST, { templateUrl: CONFIG.VIEWS[APP_ROUTES.USER_LIST], controller: 'UserListController' })
+		.when(APP_ROUTES.LOGIN,	{ templateUrl: CONFIG.TEMPLATES[APP_ROUTES.LOGIN], controller: 'LoginController' })
+		.when(APP_ROUTES.USER + '\/:id?', { templateUrl: CONFIG.TEMPLATES[APP_ROUTES.USER], controller: 'UserController' })
+		.when(APP_ROUTES.USER_LIST, { templateUrl: CONFIG.TEMPLATES[APP_ROUTES.USER_LIST], controller: 'UserListController' })
 		.otherwise(APP_ROUTES.BASE);
 
 	$locationProvider.html5Mode({ enabled: true, requireBase: false });
@@ -23,7 +25,7 @@ angular.module('Demo-NodeJS', ['Demo-NodeJS.controllers', 'Demo-NodeJS.services'
 .run(function (CONFIG, $rootScope, $location, login) {
 	// $rootScope's content is only used for index.html and partials outside views handled by controllers.
 	// no controller modifies its content.
-	$rootScope.NOTIFICATION_ALERT_PATH = CONFIG.VIEWS.NOTIFICATION.ALERT;
+	$rootScope.NOTIFICATION_ALERT_PATH = CONFIG.TEMPLATES.NOTIFICATION.ALERT;
 	// used for href attrs in nav tabs.
 	$rootScope.ROUTES = CONFIG.ROUTES.APP;
 
@@ -60,12 +62,12 @@ angular.module('Demo-NodeJS', ['Demo-NodeJS.controllers', 'Demo-NodeJS.services'
 		var path = $location.path();
 		var i = path.indexOf('/', 1);
 		if (i > 0) path = path.slice(0, i);
-		// used for verifications on the views, as in with the header partial.
+		// used for verifications on the templates, as in with the header partial.
 		$rootScope.current = {
 			user: login.loggedUser(),
 			path: {},
 			header: login.hasCredentials()?
-				CONFIG.VIEWS.HEADER.LOGGED: CONFIG.VIEWS.HEADER.NOT_LOGGED
+				CONFIG.TEMPLATES.HEADER.LOGGED: CONFIG.TEMPLATES.HEADER.NOT_LOGGED
 		};
 		// TODO: Syntax added in ECMAScript® 2015 Language Specification for this purpose.
 		$rootScope.current.path[path] = true;

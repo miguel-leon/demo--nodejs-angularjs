@@ -10,17 +10,17 @@ angular.module('Demo-NodeJS')
 			USER_LIST: '/user_list'
 		};
 
-		var VIEWS = {};
+		var TEMPLATES = {};
 		// TODO: Syntax added in ECMAScript® 2015 Language Specification for this purpose.
-		VIEWS[APP.LOGIN] = '/views/login.html';
-		VIEWS[APP.USER] = '/views/user.html';
-		VIEWS[APP.USER_LIST] = '/views/user_list.html';
-		VIEWS.HEADER = {
-			LOGGED: '/views/partials/logged-header.html',
-			NOT_LOGGED: '/views/partials/not_logged-header.html'
+		TEMPLATES[APP.LOGIN] = '/templates/views/login.html';
+		TEMPLATES[APP.USER] = '/templates/views/user.html';
+		TEMPLATES[APP.USER_LIST] = '/templates/views/user_list.html';
+		TEMPLATES.HEADER = {
+			LOGGED: '/templates/partials/logged-header.html',
+			NOT_LOGGED: '/templates/partials/not_logged-header.html'
 		};
-		VIEWS.NOTIFICATION = {
-			ALERT: '/views/partials/alert-notification.html'
+		TEMPLATES.NOTIFICATION = {
+			ALERT: '/templates/partials/alert-notification.html'
 		};
 
 		var NOTIFICATION_CLASS = { // css classes
@@ -57,7 +57,7 @@ angular.module('Demo-NodeJS')
 				}
 			},
 
-			VIEWS: VIEWS,
+			TEMPLATES: TEMPLATES,
 
 			AUTHENTICATION: {
 				STORAGE_KEY_TOKEN: 'accessToken',

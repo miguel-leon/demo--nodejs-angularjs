@@ -6,7 +6,7 @@ angular.module('Demo-NodeJS.services')
  * Service used only for communicating notifications between controllers.
  * Implements a queue of size 1 pattern.
  * The $scope.notification_alert attribute should be only modified here.
- * Then notification_alert is only consumed in views/partials/alert-notification.html
+ * Then notification_alert is only consumed in templates/partials/alert-notification.html
  */
 .factory('notification', function () {
 	var scope = {};

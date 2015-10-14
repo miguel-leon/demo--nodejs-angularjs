@@ -20,7 +20,7 @@
 		<td>{{ user.holding.name }}</td>
 		<td><button class="btn btn-info" ng-click="edit($index, user.id)">Edit</button></td>
 		<td>
-			<button class="btn btn-danger" ng-if="undeletable(user.id)"
+			<button class="btn btn-danger" ng-if="deletable(user.id)"
 					ng-click="delete($index, user.id)">Delete</button>
 		</td>
 	</tr>

@@ -32,8 +32,8 @@ angular.module('Demo-NodeJS.services')
 		 * @param id of an user
 		 * @returns {boolean}
 		 */
-		disallowedDeletionFor: function (id) {
-			return !id || id == loggedUser().id;
+		allowedDeletionFor: function (id) {
+			return id != loggedUser().id;
 		},
 
 		headersConfig: function () {

@@ -18,6 +18,10 @@ router.get('/config', returnDescription);
 router.post('/authenticate', authentication.attempt);
 /** Middleware for creating new user */
 router.post('/user', api.createUser);
+/** Middleware for retrieving the list of profiles */
+router.get('/profiles', api.getProfiles);
+/** Middleware for retrieving the list of holdings */
+router.get('/holdings', api.getHoldings);
 /** Middleware for verifying authentication before further access to the API */
 router.use(authentication.restrict);
 /** Middleware for retrieving the list of users */
@@ -28,10 +32,6 @@ router.get('/user/:id', api.getUser);
 router.put('/user', api.updateUser);
 /** Middleware for deleting an existing user in database. Must be other than the authenticated user */
 router.delete('/user/:id', api.deleteUser);
-/** Middleware for retrieving the list of profiles */
-router.get('/profiles', api.getProfiles);
-/** Middleware for retrieving the list of holdings */
-router.get('/holdings', api.getHoldings);
 /** Testing API with logged user */
 router.use('/who', function (req, res) {
 	res.json({ message: 'API accessed.', auth: req.decoded });

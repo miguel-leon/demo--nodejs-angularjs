@@ -6,7 +6,7 @@ angular.module('Demo-NodeJS.controllers')
 function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login, notification) {
 	// SET UP
 	notification.setScope($scope);
-	userHelpers.broadcast.register('UserController', $scope);
+	userHelpers.broadcast.register('UserController', $scope); // can't get controller name from anywhere
 
 	var redirectToUserList = function () { $location.path(CONFIG.ROUTES.APP.USER_LIST); };
 	var conditionalRedirect = login.hasCredentials()?
@@ -22,7 +22,7 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 	if (!$routeParams.id) { // new user
 		if (!!$scope.user.id) userHelpers.broadcast.user.publish({});
 		$scope.new_user = true;
-		$scope.undeletable = true;
+		$scope.deletable = false;
 		$scope.save = createUser; // function for button, function hoisted
 	}
 	else { // existing user
@@ -32,7 +32,7 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 				userHelpers.publishFromResponse, // success handler
 				userHelpers.isNonexistent.and(conditionalRedirect)); // failure handler
 		}
-		if (!($scope.undeletable = login.disallowedDeletionFor($routeParams.id))) {
+		if ($scope.deletable = login.allowedDeletionFor($routeParams.id)) {
 			$scope.delete = deleteUser; // function for button, function hoisted
 		}
 		$scope.save = modifyUser; // function for button, function hoisted

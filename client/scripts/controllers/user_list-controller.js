@@ -6,8 +6,8 @@ angular.module('Demo-NodeJS.controllers')
 function (CONFIG, $scope, $location, $q, serverAPI, login, userHelpers, notification) {
 	// SET UP
 	notification.setScope($scope);
-	userHelpers.broadcast.register('UserListController', $scope);
-	$scope.undeletable = login.disallowedDeletionFor;
+	userHelpers.broadcast.register('UserListController', $scope); // can't get controller name from anywhere
+	$scope.deletable = login.allowedDeletionFor;
 
 	// RUN
 	// unauthorized or unknown failures, handled by server api service
