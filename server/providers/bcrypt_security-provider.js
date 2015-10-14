@@ -10,8 +10,8 @@ var PROCESSING_ROUNDS = 10;
 
 function handler(resolve, reject){
 	return function (err, value) {
-		if (err) reject(err);
-		else resolve(value);
+		if (!err) resolve(value);
+		else reject(err);
 	}
 }
 

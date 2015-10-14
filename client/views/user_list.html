@@ -6,9 +6,9 @@
 	<tr>
 		<th class="col-sm-2">Name</th>
 		<th class="col-sm-2">Last Name</th>
-		<th class="col-sm-4">E-mail</th>
-		<th class="col-sm-1">Profile</th>
-		<th class="col-sm-1">Holding</th>
+		<th class="col-sm-2">E-mail</th>
+		<th class="col-sm-2">Profile</th>
+		<th class="col-sm-2">Holding</th>
 		<th class="col-sm-1"></th>
 		<th class="col-sm-1"></th>
 	</tr>
@@ -20,7 +20,7 @@
 		<td>{{ user.holding.name }}</td>
 		<td><button class="btn btn-info" ng-click="edit($index, user.id)">Edit</button></td>
 		<td>
-			<button class="btn btn-danger" ngext-remove-element-if="undeletable(user.id)"
+			<button class="btn btn-danger" ng-if="undeletable(user.id)"
 					ng-click="delete($index, user.id)">Delete</button>
 		</td>
 	</tr>
@@ -28,5 +28,5 @@
 
 <div class="footer">
 	<button type="button" class="btn btn-default" ng-click="register()">
-		Register user</button>
+		Register new user</button>
 </div>

@@ -10,7 +10,10 @@ angular.module('Demo-NodeJS.services')
  */
 .factory('notification', function () {
 	var scope = {};
-	var notification = {};
+	var notification = null;
+	function clearNotification() {
+		scope.notification_alert = null;
+	}
 
 	return {
 		push: function (new_notification) {
@@ -18,17 +21,18 @@ angular.module('Demo-NodeJS.services')
 		},
 		pop: function () {
 			var prev_notification = notification;
-			notification = {};
+			notification = null;
 			return prev_notification;
 		},
 
 		pushAndPop: function (new_notification) {
 			scope.notification_alert = new_notification;
-			notification = {};
+			notification = null;
 		},
 		setScope: function (new_scope) {
 			scope = new_scope;
 			scope.notification_alert = this.pop();
+			scope.clearNotification = clearNotification;
 		}
 	};
 });

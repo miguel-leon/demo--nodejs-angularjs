@@ -42,6 +42,7 @@ function (CONFIG, $scope, $location, $q, serverAPI, login, userHelpers, notifica
 			userHelpers.publishFromResponse.and(userHelpers.asDeleted)
 				.and(function () {
 					$scope.users.splice(index, 1);
+					notification.pop();
 				}),
 			// failure handlers, both are only reachable if the page was hacked
 			userHelpers.isNonexistent.or(userHelpers.isUndeletable));

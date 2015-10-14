@@ -15,10 +15,12 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 
 	// RUN
 	// unauthorized or unknown failures, handled by server api service
-	if (!$scope.profiles) serverAPI.Profiles.list().then(userHelpers.publishProfilesFromResponse);
-	if (!$scope.holdings) serverAPI.Holdings.list().then(userHelpers.publishHoldingsFromResponse);
+	serverAPI.Profiles.list().then(userHelpers.publishProfilesFromResponse);
+	serverAPI.Holdings.list().then(userHelpers.publishHoldingsFromResponse);
+	if (!$scope.user) userHelpers.broadcast.user.publish({});
 
 	if (!$routeParams.id) { // new user
+		if (!!$scope.user.id) userHelpers.broadcast.user.publish({});
 		$scope.new_user = true;
 		$scope.undeletable = true;
 		$scope.save = createUser; // function for button, function hoisted
@@ -37,7 +39,10 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 	}
 
 	// FUNCTION FOR BUTTONS
-	$scope.cancel = conditionalRedirect;
+	$scope.cancel = function () {
+		userHelpers.broadcast.user.publish({});
+		conditionalRedirect();
+	};
 
 	function createUser() {
 		serverAPI.Users.create($scope.user).then(
@@ -48,11 +53,10 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 	}
 
 	function modifyUser() {
-		if ($scope.user.id != login.loggedUser().id ||
-			confirm(CONFIG.NOTIFICATIONS.USER.CONFIRM_LOGGED_MODIFICATION))
 		serverAPI.Users.modify($scope.user).then(
 			// success handlers
-			userHelpers.modifyLoggedUser.or
+			//userHelpers.modifyLoggedUser.or
+			userHelpers.checkIfModifiedLoggedUser.and
 			(userHelpers.publishFromResponse.and(userHelpers.asModified).and(redirectToUserList)),
 			// failure handlers
 			userHelpers.isIncomplete.or(userHelpers.isDuplicated.or

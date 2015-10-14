@@ -23,46 +23,43 @@ module.exports = {
 		},
 
 		find: function (fields) {
-			if (!fields.id) return models.User.findOne({where: fields});
-			return models.User.findById(fields.id);
+			if (!fields.id) return models.User.findOne({where: fields}).then(nonexistentIfNull);
+			return models.User.findById(fields.id).then(nonexistentIfNull);
 		},
 
 		create: function (user) {
-			return models.User.create(user).then(
-				null, // success handler managed elsewhere
+			return models.User.create(user)
+			.then(null, // success handler managed elsewhere
 				function (reason) {
 					if (reason instanceof Sequelize.UniqueConstraintError) throw api_errors.DuplicatedUserError;
 					if (reason instanceof Sequelize.ValidationError) throw api_errors.MissingDataError;
 					// Sequelize.ForeignKeyConstraintError may happen if client was hacked.
 					throw reason;
-				}
-			);
+				});
 		},
 
 		update: function (user) {
 			var options = {
 				where: {id: user.id}
 			};
-			return models.User.update(user, options).then(
-				function (data) {
+			return models.User.update(user, options)
+			.then(function (data) {
 					if (!data[0] /* affected rows count */) throw api_errors.NonexistentUserError;
-					return user;
+					return user; // MySql doesn't return the updated rows
 				},
 				function (reason) {
 					if (reason instanceof Sequelize.UniqueConstraintError) throw api_errors.DuplicatedUserError;
 					// Sequelize.ForeignKeyConstraintError may happen if client was hacked.
 					throw reason;
-				}
-			);
+				});
 		},
 
 		delete: function (fields) {
-			return models.User.destroy({where: fields}).then(
-				function (count) {
+			return models.User.destroy({where: fields})
+			.then(function (count) {
 					if (!count) throw api_errors.NonexistentUserError;
 					return fields;
-				}
-			);
+				});
 		},
 
 		/* NOT USED */
@@ -88,3 +85,11 @@ module.exports = {
 		find: function (id) {}
 	}
 };
+
+  //==============================//
+ //      HOISTED FUNCTIONS       //
+//==============================//
+function nonexistentIfNull(user) {
+	if (!user) throw api_errors.NonexistentUserError;
+	return user;
+}

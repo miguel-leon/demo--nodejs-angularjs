@@ -12,13 +12,18 @@ angular.module('Demo-NodeJS.services')
 		publishFromResponse: publishFromResponseFunctionFor('user'),
 		publishProfilesFromResponse: publishFromResponseFunctionFor('profiles'),
 		publishHoldingsFromResponse: publishFromResponseFunctionFor('holdings'),
-		modifyLoggedUser: functionChainer(function (data) {
+		modifyLoggedUser: functionChainer(function (data) { // not used
 			if (data.user.id === login.loggedUser().id) {
 				notification.push(CONFIG.NOTIFICATIONS.USER.MODIFIED_LOGGED);
 				login.dismiss();
 				return true;
 			}
 			return false;
+		}),
+		checkIfModifiedLoggedUser: functionChainer(function (data) {
+			if (data.user.id === login.loggedUser().id) {
+				login.saveAuthenticationFrom(data);
+			}
 		}),
 		// the following functions are used for pushing notifications.
 		asCreated: pushNotificationFunction(CONFIG.NOTIFICATIONS.USER.CREATED),
@@ -54,15 +59,15 @@ angular.module('Demo-NodeJS.services')
 			broadcast[key].publish(data[key]);
 		});
 	}
-	function pushNotificationFunction(notification) {
+	function pushNotificationFunction(message) {
 		return functionChainer(function () {
-			notification.push(notification);
+			notification.push(message);
 		});
 	}
-	function rejectionHandlerAndNotificationFunction(bad_response, notification) {
+	function rejectionHandlerAndNotificationFunction(bad_response, message) {
 		return functionChainer(function (reason) {
 			if (reason[bad_response]) {
-				notification.pushAndPop(notification);
+				notification.pushAndPop(message);
 				return true;
 			}
 			return false;

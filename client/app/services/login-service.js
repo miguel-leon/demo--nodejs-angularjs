@@ -3,16 +3,8 @@
 angular.module('Demo-NodeJS.services')
 
 .factory('login', function (CONFIG, $http, $q, $location, storage) {
-	function hasCredentials() {
-		return !!storage.get(CONFIG.AUTHENTICATION.STORAGE_KEY_TOKEN);
-	}
-	function loggedUser() {
-		// the logged user may be saved in a variable to avoid continuous JSON parsing.
-		if (hasCredentials()) return storage.getJSON(CONFIG.AUTHENTICATION.STORAGE_KEY_USER);
-		return null;
-	}
-
 	return {
+		saveAuthenticationFrom: saveAuthenticationFrom,
 		/**
 		 * @param user logging in
 		 * @returns a {Promise}
@@ -21,8 +13,7 @@ angular.module('Demo-NodeJS.services')
 			return $http.post(CONFIG.ROUTES.API.AUTHENTICATE, user).then(
 				function (response) { // success
 					if (!response.data.success) return $q.reject(response.data);
-					storage.set(CONFIG.AUTHENTICATION.STORAGE_KEY_TOKEN, response.data.token);
-					storage.setJSON(CONFIG.AUTHENTICATION.STORAGE_KEY_USER, response.data.user);
+					saveAuthenticationFrom(response.data);
 					return response.data;
 				});
 		},
@@ -54,5 +45,19 @@ angular.module('Demo-NodeJS.services')
 				storage.get(CONFIG.AUTHENTICATION.STORAGE_KEY_TOKEN);
 			return config;
 		}
+	};
+
+	// HOISTED FUNCTIONS
+	function hasCredentials() {
+		return !!storage.get(CONFIG.AUTHENTICATION.STORAGE_KEY_TOKEN);
+	}
+	function loggedUser() {
+		// the logged user may be saved in a variable to avoid continuous JSON parsing.
+		if (hasCredentials()) return storage.getJSON(CONFIG.AUTHENTICATION.STORAGE_KEY_USER);
+		return null;
+	}
+	function saveAuthenticationFrom(data) {
+		storage.set(CONFIG.AUTHENTICATION.STORAGE_KEY_TOKEN, data.token);
+		storage.setJSON(CONFIG.AUTHENTICATION.STORAGE_KEY_USER, data.user);
 	}
 });

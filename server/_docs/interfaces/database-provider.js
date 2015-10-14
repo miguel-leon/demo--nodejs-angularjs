@@ -7,53 +7,69 @@
  */
 module.exports = {
 	/**
+	 * @typedef UserError
+	 * @property user = null
+	 */
+	/**
+	 * @typedef {UserError} MissingDataError
+	 * @property missingData = true
+	 */
+	/**
+	 * @typedef {UserError} DuplicatedUserError
+	 * @property duplicatedUser = true
+	 */
+	/**
+	 * @typedef {UserError} NonexistentUserError
+	 * @property nonexistentUser = true
+	 */
+
+	/**
 	 * Data Access Object for Users
 	 * @interface DatabaseProvider~User
 	 */
 	Users: {
 		/**
-		 * List all users
-		 * @param limit [Optional] maximum number of results
-		 * @param start [Optional] result offset start
+		 * List all users.
+		 * @param {int} limit [Optional] maximum number of results
+		 * @param {int} start [Optional] result offset start
 		 * @returns {Promise.<User[]>}
 		 * @throws
 		 */
 		list: function (limit, start) {},
 		/**
-		 * Return the user that matches the properties in <fields>
+		 * Return the user that matches the properties in <fields>.
 		 * @param {Object} fields
-		 * @returns {Promise.<User>} resolves with @arg user if corresponding record exits; null otherwise.
-		 * @throws
+		 * @returns {Promise.<User, UserError>} resolves with
+		 * @arg {User} user if corresponding record exits.
+		 * @throws {NonexistentUserError} reason
 		 */
 		find: function (fields) {},
 		/**
 		 * Creates a new record in the database.
 		 * @param {User} user
-		 * @returns {Promise.<User, Error>} resolves with @arg user if the user was created; null otherwise.
-		 * @throws {Error} reason
-		 * @typedef Error
-		 * @property {boolean} missingData
-		 * @property {boolean} duplicatedUser
+		 * @returns {Promise.<User, UserError>} resolves with
+		 * @arg {User} user if the user was created.
+		 * @throws {MissingDataError} reason
+		 * @throws {DuplicatedUserError} reason
 		 * @throws
 		 */
 		create: function (user) {},
 		/**
 		 * Modifies an existing record in the database.
 		 * @param {User} user
-		 * @returns {Promise.<User, Error>} resolves with @arg user if the user was updated; null otherwise.
-		 * @throws {Error} reason
-		 * @typedef Error
-		 * @property {boolean} missingData
-		 * @property {boolean} duplicatedUser
-		 * @property {boolean} nonexistentUser
-		 * @property {boolean} invalidPassword
+		 * @returns {Promise.<User, UserError>} resolves with
+		 * @arg {User} user if the user was updated.
+		 * @throws {DuplicatedUserError} reason
+		 * @throws {NonexistentUserError} reason
 		 * @throws
 		 */
 		update: function (user) {},
 		/**
-		 * Delete User records that match the properties in <fields>
+		 * Delete User records that match the properties in <fields>.
 		 * @param {Object} fields
-		 * @returns {Promise.<User>} resolves with @arg user if the user was deleted; null otherwise (nonexistent user).
+		 * @returns {Promise.<User, UserError>} resolves with
+		 * @arg {User} user if the user was deleted.
+		 * @throws {NonexistentUserError} reason
 		 * @throws
 		 */
 		delete: function (fields) {},
@@ -62,7 +78,7 @@ module.exports = {
 		/* NOT USED */
 
 		/**
-		 * List users that match  the properties in <fields>
+		 * List users that match  the properties in <fields>.
 		 */
 		findAll: function (fields) {},
 		/**

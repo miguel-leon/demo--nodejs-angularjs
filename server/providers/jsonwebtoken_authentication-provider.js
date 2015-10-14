@@ -25,9 +25,9 @@ module.exports = {
 	/**
 	 * @param {failureCallback} onFailure(err, req, res)
 	 * @returns {Middleware}
-	 * TODO: convert to returning a promise instead of a middleware
+	 * TODO: convert to returning a promise instead of a middleware?
 	 */
-	verify: function (onFailure) {
+	verificationMiddleware: function (onFailure) {
 		return function (req, res, next) {
 			// check header or url parameters or post parameters for token
 			var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -59,7 +59,12 @@ module.exports = {
 		return json;
 	},
 
-	/* NOT USED */
-	deny: function (req, res) {
+	/**
+	 * @param inf - expects an user id to compare against the decoded user id.
+	 * @param req
+	 * @param res
+	 */
+	isAuthenticated: function (inf, req, res) {
+		return req.decoded.id == inf;
 	}
 };

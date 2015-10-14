@@ -3,7 +3,7 @@
 angular.module('Demo-NodeJS.controllers', []);
 angular.module('Demo-NodeJS.services', ['Lib']);
 
-angular.module('Demo-NodeJS', ['Demo-NodeJS.controllers', 'Demo-NodeJS.services', 'ngRoute', 'ngExtensions'])
+angular.module('Demo-NodeJS', ['Demo-NodeJS.controllers', 'Demo-NodeJS.services', 'ngRoute'])
 
 .config(function (CONFIG, $routeProvider, $locationProvider) {
 	// TODO: fix uncaught exception (URIError: URI malformed) thrown by decodeURIComponent in AngularJS

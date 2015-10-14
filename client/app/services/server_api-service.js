@@ -46,10 +46,10 @@ angular.module('Demo-NodeJS.services')
 			}
 		},
 		Profiles: {
-			list: cachedListFor.bind(null, 'profiles', CONFIG.ROUTES.API.PROFILE_LIST)
+			list: cachedListFor.bind(null, 'profiles', CONFIG.ROUTES.API.PROFILE_LIST, convertToArrayLikeById)
 		},
 		Holdings: {
-			list: cachedListFor.bind(null, 'holdings', CONFIG.ROUTES.API.HOLDING_LIST)
+			list: cachedListFor.bind(null, 'holdings', CONFIG.ROUTES.API.HOLDING_LIST, convertToArrayLikeById)
 		}
 	};
 
@@ -71,7 +71,7 @@ angular.module('Demo-NodeJS.services')
 		return emptyPromise; // return of empty promise, halts the promise chain.
 	}
 
-	function convertToArrayLikeWithId(arr) {
+	function convertToArrayLikeById(arr) {
 		return arr.reduce(function (arraylike, item) {
 			arraylike[item.id] = item;
 			return arraylike;
@@ -85,7 +85,8 @@ angular.module('Demo-NodeJS.services')
 				handleRejectedAPIRequest
 			).then(
 				function (data) {
-					cache[key] = (!filter)? data[key]: filter(data[key]);
+					if (!filter) cache[key] = data[key];
+					else data[key] = cache[key] = filter(data[key]);
 					return data;
 				}
 			);

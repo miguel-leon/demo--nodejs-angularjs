@@ -1,8 +1,8 @@
-<div class="container">
-	<div class="col-sm-offset-3 col-sm-7 alert"
-		 ng-class="notification_alert.class"
-		 ng-hide="!notification_alert.message">
-		{{ notification_alert.message }}
-		<a class="close" ng-click="notification_alert.message = ''">&times;</a>
+<div class="container text-center" role="notification">
+	<div ng-if="notification_alert" class="col-sm-offset-2 col-sm-10">
+		<div class="row alert" ng-class="notification_alert.class" style="display: inline-block">
+			<p class="col-sm-11">{{notification_alert.message}}</p>
+			<a class="col-sm-1 close" ng-click="clearNotification()">&times;</a>
+		</div>
 	</div>
 </div>
