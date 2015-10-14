@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Lib', [])
+angular.module('Lib')
 
 /**
  * Implements a pattern for a function chain. Simple but powerful concept that allows function callbacks

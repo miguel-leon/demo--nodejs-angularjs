@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="Demo-NodeJS">
+<html lang="en">
 <head>
 	<meta charset="UTF-8" />
 	<title>Demo - development with NodeJS and AngularJS</title>
 
-	<!-- TODO: change dynamically between CDN and local versions of third party libraries -->
-	<!-- Bootstrap compiled and minified >
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-	<!-- -->
-	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap-3.3.5-dist/css/bootstrap.css" />
+	<!-- Bootstrap compiled and minified -->
+<!--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap-3.3.5-dist/css/bootstrap.css" />
 
 	<base href="/" />
 </head>
@@ -22,24 +20,12 @@
 	<div class="container" ng-view></div>
 
 	<!-- AngularJS -->
-	<!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script-->
-	<!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script-->
-	<script src="./vendor/angular-1.4.4/angular.js"></script>
-	<script src="./vendor/angular-1.4.4/angular-route.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>-->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>-->
+	<script src="vendor/angular-1.4.4/angular.js"></script>
+	<script src="vendor/angular-1.4.4/angular-route.js"></script>
 
-	<script src="lib/function_chainer.js"></script>
-	<!-- TODO: add dependency loader -->
-	<script src="scripts/app.js"></script>
-	<script src="scripts/config.js"></script>
-	<script src="scripts/controllers/login-controller.js"></script>
-	<script src="scripts/controllers/user_list-controller.js"></script>
-	<script src="scripts/controllers/user-controller.js"></script>
-	<script src="scripts/services/login-service.js"></script>
-	<script src="scripts/services/storage-service.js"></script>
-	<script src="scripts/services/server_api-service.js"></script>
-	<script src="scripts/services/broadcast-service.js"></script>
-	<script src="scripts/services/notification-service.js"></script>
-	<script src="scripts/services/user_helpers-service.js"></script>
-	<script src="scripts/directives/form_field-directive.js"></script>
+	<script src="lib/dependency-loader.js"></script>
+	<script src="scripts/app-loader.js"></script>
 </body>
 </html>

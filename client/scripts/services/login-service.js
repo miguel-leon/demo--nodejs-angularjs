@@ -54,7 +54,7 @@ angular.module('Demo-NodeJS.services')
 	function loggedUser() {
 		// the logged user may be saved in a variable to avoid continuous JSON parsing.
 		if (hasCredentials()) return storage.getJSON(CONFIG.AUTHENTICATION.STORAGE_KEY_USER);
-		return null;
+		return {};
 	}
 	function saveAuthenticationFrom(data) {
 		storage.set(CONFIG.AUTHENTICATION.STORAGE_KEY_TOKEN, data.token);

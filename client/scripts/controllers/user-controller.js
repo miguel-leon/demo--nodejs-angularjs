@@ -45,6 +45,7 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 	};
 
 	function createUser() {
+		if ($scope.userForm.$invalid) return;
 		serverAPI.Users.create($scope.user).then(
 			// success handlers
 			userHelpers.publishFromResponse.and(userHelpers.asCreated).and(conditionalRedirect),
@@ -53,6 +54,7 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 	}
 
 	function modifyUser() {
+		if ($scope.userForm.$invalid) return;
 		serverAPI.Users.modify($scope.user).then(
 			// success handlers
 			//userHelpers.modifyLoggedUser.or

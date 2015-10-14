@@ -6,61 +6,68 @@
 <div ng-include="NOTIFICATION_ALERT_PATH"></div>
 
 <form name="userForm" class="form-horizontal" role="form" novalidate>
-	<div class="form-group">
-		<label class="control-label col-sm-2" for="name">Name:</label>
-		<div class="col-sm-10">
-			<input id="name" type="text" class="form-control" required ng-model="user.name">
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="control-label col-sm-2" for="last-name">Last Name:</label>
-		<div class="col-sm-10">
-			<input id="last-name" type="text" class="form-control" required ng-model="user.last_name">
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="control-label col-sm-2" for="email">Email:</label>
-		<div class="col-sm-10">
-			<input id="email" type="email" class="form-control" required ng-model="user.email">
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="control-label col-sm-2" for="profile">Profile:</label>
-		<div class="col-sm-10">
-			<select id="profile" class="form-control" required ng-model="user.profile_id"
-					ng-options="profile.id as profile.name for profile in profiles">
-			</select>
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="control-label col-sm-2" for="holding">Holding:</label>
-		<div class="col-sm-10">
-			<select id="holding" class="form-control" required ng-model="user.holding_id"
-					ng-options="holding.id as holding.name for holding in holdings">
-			</select>
-		</div>
-	</div>
+
+	<validated-form-group id="name" name="name" model="user.name" label="Name:">
+		<input type="text" placeholder="Enter user name" required>
+		<errors>
+			<error on="required">This field is required</error>
+		</errors>
+	</validated-form-group>
+
+	<validated-form-group id="last_name" name="last_name" model="user.last_name" label="Last Name:">
+		<input type="text" placeholder="Enter user last name" required>
+		<errors>
+			<error on="required">This field is required</error>
+		</errors>
+	</validated-form-group>
+
+	<validated-form-group id="email" name="email" model="user.email" label="Email:">
+		<input type="email" placeholder="Enter email" required>
+		<errors>
+			<error on="email">A valid email is required</error>
+		</errors>
+	</validated-form-group>
+
+	<validated-form-group id="profile" name="profile" model="user.profile_id" label="Profile:">
+		<select class="form-control" required placeholder="Select a profile"
+			ng-options="profile.id as profile.name for profile in profiles"></select>
+		<errors>
+			<error on="required">This field is required</error>
+		</errors>
+	</validated-form-group>
+
+	<validated-form-group id="holding" name="holding" model="user.holding_id" label="Holding:">
+		<select class="form-control" required
+			ng-options="holding.id as holding.name for holding in holdings"></select>
+		<errors>
+			<error on="required">This field is required</error>
+		</errors>
+	</validated-form-group>
+
 	<a class="col-sm-offset-2 btn btn-link" href="#" role="button"
 			ng-hide="new_user || changing_password" ng-click="changing_password=true">Change password</a>
 	<div ng-show="new_user || changing_password">
-		<div class="form-group" ng-hide="new_user">
-			<label class="control-label col-sm-2" for="previous_password">Previous Password:</label>
-			<div class="col-sm-10">
-				<input id="previous_password" type="password" class="form-control" required ng-model="user.previous_password">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-sm-2" for="password">Password:</label>
-			<div class="col-sm-10">
-				<input id="password" type="password" class="form-control" required ng-model="user.password">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-sm-2" for="confirm_password">Confirm Password:</label>
-			<div class="col-sm-10">
-				<input id="confirm_password" type="password" class="form-control" required ng-model="user.confirm_password">
-			</div>
-		</div>
+
+		<validated-form-group id="previous_password" name="previous_password" model="user.previous_password"
+							  label="Previous password:" ng-hide="new_user">
+			<input type="password" placeholder="Enter previous password"
+				   ng-required="!new_user && changing_password">
+		</validated-form-group>
+
+		<validated-form-group id="password" name="password" model="user.password" label="Password:">
+			<input type="password" placeholder="Enter password"
+				   ng-required="new_user || changing_password">
+		</validated-form-group>
+
+		<validated-form-group id="confirm_password" name="confirm_password" model="user.confirm_password"
+							  label="Confirm password:">
+			<input type="password" placeholder="Confirm password"
+				   ng-required="new_user || changing_password" match-with="user.password">
+			<errors>
+				<error on="match">Passwords must match</error>
+			</errors>
+		</validated-form-group>
+
 	</div>
 
 	<div class="form-group col-sm-12"></div>

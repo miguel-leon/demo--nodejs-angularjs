@@ -1,11 +1,6 @@
 'use strict';
 
-angular.module('Demo-NodeJS.controllers', []);
-angular.module('Demo-NodeJS.services', ['Lib']);
-angular.module('Demo-NodeJS.directives', []);
-
-angular.module('Demo-NodeJS',
-	['Demo-NodeJS.controllers', 'Demo-NodeJS.services', 'Demo-NodeJS.directives', 'ngRoute'])
+angular.module('Demo-NodeJS')
 
 .config(function (CONFIG, $routeProvider, $locationProvider) {
 	// TODO: fix uncaught exception (URIError: URI malformed) thrown by decodeURIComponent in AngularJS
