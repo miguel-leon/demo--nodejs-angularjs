@@ -15,7 +15,7 @@ angular.module('Demo-NodeJS.services')
 		scope.notification_alert = null;
 	}
 
-	return {
+	var service = {
 		push: function (new_notification) {
 			scope.notification_alert = notification = new_notification;
 		},
@@ -31,8 +31,10 @@ angular.module('Demo-NodeJS.services')
 		},
 		setScope: function (new_scope) {
 			scope = new_scope;
-			scope.notification_alert = this.pop();
+			scope.notification_alert = service.pop();
 			scope.clearNotification = clearNotification;
 		}
 	};
+
+	return service;
 });

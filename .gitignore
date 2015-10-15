@@ -1,5 +1,8 @@
 commit-message.txt
 
+#editor
+.idea
+
 
 # Client third-party libraries
 client/vendor/bootstrap*/*
@@ -12,7 +15,7 @@ client/vendor/angular*/*
 !client/vendor/angular*/angular-route.js
 
 
-
+# https://github.com/github/gitignore/blob/master/Node.gitignore
 # Logs
 logs
 *.log

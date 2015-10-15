@@ -23,7 +23,7 @@ module.exports = {
 	restrict: providers.authentication.verificationMiddleware(function (err, req, res) {
 		err.success = false;
 		err.unauthorized = true;
-		res.status(403).json(err);
+		res.status(401).json(err);
 	}),
 
 	/**

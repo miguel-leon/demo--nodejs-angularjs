@@ -14,42 +14,33 @@ angular.module('Demo-NodeJS.services')
 	// All methods returns Promises
 	return {
 		Users: {
+			// TODO: cache user list too? only if list is not modified
 			list: function () {
-				return $http.get(CONFIG.ROUTES.API.USER_LIST, login.headersConfig()).then(
-					handleAcceptedAPIRequest,
-					handleRejectedAPIRequest
-				);
+				return $http.get(CONFIG.ROUTES.API.USERS, login.headersConfig())
+				.then(handleAcceptedAPIRequest, handleRejectedAPIRequest);
 			},
 			find: function (id) {
-				return $http.get(CONFIG.ROUTES.API.USER+'\/' + id, login.headersConfig()).then(
-					handleAcceptedAPIRequest,
-					handleRejectedAPIRequest
-				);
+				return $http.get(CONFIG.ROUTES.API.USERS + '\/' + id, login.headersConfig())
+				.then(handleAcceptedAPIRequest, handleRejectedAPIRequest);
 			},
 			create: function (user) {
-				return $http.post(CONFIG.ROUTES.API.USER, user).then(
-					handleAcceptedAPIRequest,
-					handleRejectedAPIRequest
-				);
+				return $http.post(CONFIG.ROUTES.API.USERS, user)
+				.then(handleAcceptedAPIRequest, handleRejectedAPIRequest);
 			},
 			modify: function (user) {
-				return $http.put(CONFIG.ROUTES.API.USER, user, login.headersConfig()).then(
-					handleAcceptedAPIRequest,
-					handleRejectedAPIRequest
-				);
+				return $http.put(CONFIG.ROUTES.API.USERS + '\/' + user.id, user, login.headersConfig())
+				.then(handleAcceptedAPIRequest, handleRejectedAPIRequest);
 			},
 			delete: function (id) {
-				return $http.delete(CONFIG.ROUTES.API.USER+'\/' + id, login.headersConfig()).then(
-					handleAcceptedAPIRequest,
-					handleRejectedAPIRequest
-				);
+				return $http.delete(CONFIG.ROUTES.API.USERS + '\/' + id, login.headersConfig())
+				.then(handleAcceptedAPIRequest, handleRejectedAPIRequest);
 			}
 		},
 		Profiles: {
-			list: cachedListFor.bind(null, 'profiles', CONFIG.ROUTES.API.PROFILE_LIST, convertToArrayLikeById)
+			list: cachedListFor.bind(null, 'profiles', CONFIG.ROUTES.API.PROFILES, convertToArrayLikeById)
 		},
 		Holdings: {
-			list: cachedListFor.bind(null, 'holdings', CONFIG.ROUTES.API.HOLDING_LIST, convertToArrayLikeById)
+			list: cachedListFor.bind(null, 'holdings', CONFIG.ROUTES.API.HOLDINGS, convertToArrayLikeById)
 		}
 	};
 

@@ -47,13 +47,17 @@ module.exports = {
 			})
 		.then(stripPasswordFromUserResponse)
 		.then(makeSuccessJSONResponseForUser, rejectionHandler)
-		.then(res.json.bind(res), next);
+		.then(function(json) {
+				res.status(201);
+				res.json(json);
+			},
+			next);
 	},
 	/**
 	 * Middleware for modifying an existing user.
 	 */
 	updateUser: function (req, res, next) {
-		if (!req.body.id) return res.json(addFailureToResponse(api_errors.MissingDataError)); // client hacked
+		req.body.id = req.params.id;
 
 		(new Promise(function (resolve, reject){
 			// if it didn't require a change of password

@@ -39,10 +39,9 @@ angular.module('Demo-NodeJS')
 				API: {
 					BASE: '/api',
 					AUTHENTICATE: '/api/authenticate',
-					USER_LIST: '/api/user_list',
-					USER: '/api/user',
-					PROFILE_LIST: '/api/profiles',
-					HOLDING_LIST: '/api/holdings'
+					USERS: '/api/users',
+					PROFILES: '/api/profiles',
+					HOLDINGS: '/api/holdings'
 				}
 			},
 
