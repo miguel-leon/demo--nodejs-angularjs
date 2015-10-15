@@ -4,7 +4,8 @@
   "description": "Demostración de técnicas de desarrollo en NodeJS y AngularJS",
   "author": "Miguel Leon <miguel.e.leon.f@gmail.com>",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+	"prepare": "node server/database/migration.js"
   },
   "repository": {
     "type": "git",
