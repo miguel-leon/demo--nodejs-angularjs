@@ -59,6 +59,8 @@ o también
 
     node server/server.js
 
+Luego acceder a `http://localhost:3000` en el navegador
+
 
 Reglas de negocio
 -----------------

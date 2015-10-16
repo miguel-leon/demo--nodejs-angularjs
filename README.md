@@ -59,6 +59,8 @@ Starting the server app with:
 or
 
     node server/server.js
+	
+then go to `http://localhost:3000` in the web browser
 
 
 Business Rules
