@@ -2,18 +2,15 @@
 
 var path = require('path');
 var fs = require('fs');
-var CONFIG = JSON.parse(fs.readFileSync(path.join(__dirname, '../config.json'), 'utf8'));
+var CONFIG = global.CONFIG = JSON.parse(fs.readFileSync(path.join(__dirname, '../config.json'), 'utf8'));
 
-
-var Sequelize = global.Sequelize = require("sequelize");
-
-var OPTIONS = CONFIG["database"]["options"];
-OPTIONS.dialectOptions = {
+var options = CONFIG["database"]["options"] || {};
+options.dialectOptions = {
 	multipleStatements: true
 };
 
-var sequelize = global.sequelize = new Sequelize(CONFIG["database"]["name"],
-	CONFIG["database"]["username"], CONFIG["database"]["password"], OPTIONS);
+var Sequelize = global.Sequelize = require('sequelize');
+var sequelize = global.sequelize = require('./connection')(Sequelize, options);
 
 //sequelize.validate().then(function(errors) { console.log('errors: ' + errors) });
 

@@ -3,6 +3,7 @@
 // following variables must be set in the global scope at this point.
 // var Sequelize;
 // var sequelize;
+
 var definitions = require('./definitions/sequelize-definitions');
 var TYPES = definitions.TYPES;
 

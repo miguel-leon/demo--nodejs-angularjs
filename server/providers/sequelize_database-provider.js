@@ -4,10 +4,8 @@
 // var CONFIG;
 // var api_errors;
 
-var Sequelize = global.Sequelize = require("sequelize");
-var sequelize = global.sequelize = new Sequelize(CONFIG["database"]["name"],
-	CONFIG["database"]["username"], CONFIG["database"]["password"],
-	CONFIG["database"]["options"]);
+var Sequelize = global.Sequelize = require('sequelize');
+var sequelize = global.sequelize = require('../database/connection')(Sequelize, CONFIG["database"]["options"]);
 
 var models = require('../database/models');
 

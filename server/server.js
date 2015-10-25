@@ -52,7 +52,13 @@ app.use(/[\s\S]*/, function (req, res) {
   //==============================//
  //           RUNNING            //
 //==============================//
-var port = process.env.PORT || CONFIG["server"]["port"];
-app.listen(port, function () {
-	console.log("Server is running on port " + port);
-});
+var port = process.env[CONFIG["server"]["env-port"]] || CONFIG["server"]["alt-port"];
+if (!!port) {
+	app.listen(port, process.env[CONFIG["server"]["env-host"]], function () {
+		console.log('Server is running on port ' + port);
+	});
+}
+else  {
+	console.log('Not defined port to start the server');
+}
+

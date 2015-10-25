@@ -1,9 +1,12 @@
 {
   "server": {
-	"port": 3000
+    "env-port": "PORT",
+	"alt-port": 3000,
+    "env-host": "IP"
   },
   "database": {
     "name": "demodb",
+    "env-url": "DB_URL",
     "username": "root",
     "password": "1234",
     "options": {
