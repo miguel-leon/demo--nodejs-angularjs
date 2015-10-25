@@ -5,7 +5,7 @@
   "author": "Miguel Leon <miguel.e.leon.f@gmail.com>",
   "scripts": {
     "start": "node server/server.js",
-	"prepare": "node server/database/migration.js"
+	"prepare": "node server/database/migrate.js"
   },
   "repository": {
     "type": "git",
