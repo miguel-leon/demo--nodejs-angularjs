@@ -1,14 +1,12 @@
 {
   "server": {
-    "env-port": "PORT",
-	"alt-port": 3000,
-    "env-host": "IP"
+    "env-port": "OPENSHIFT_NODEJS_PORT",
+	"alt-port": 8080,
+    "env-host": "OPENSHIFT_NODEJS_IP"
   },
   "database": {
     "name": "demodb",
-    "env-url": "DB_URL",
-    "username": "root",
-    "password": "1234",
+    "env-url": "OPENSHIFT_MYSQL_DB_URL",
     "options": {
       "dialect": "mysql"
     }
