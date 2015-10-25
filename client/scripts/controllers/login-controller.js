@@ -20,9 +20,8 @@ angular.module('Demo-NodeJS.controllers')
 				$location.path(CONFIG.ROUTES.AUTHENTICATED_ENTRY);
 			},
 			function (reason) { // failure
-				if (reason.invalidCredentials) {
-					notification.pushAndPop(CONFIG.NOTIFICATIONS.INVALID_CREDENTIALS);
-				}
+				if (reason.invalidCredentials) notification.pushAndPop(CONFIG.NOTIFICATIONS.INVALID_CREDENTIALS);
+				else notification.pushAndPop(CONFIG.NOTIFICATIONS.GENERIC_ERROR);
 			});
 	};
 });

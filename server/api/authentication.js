@@ -2,6 +2,7 @@
 
 // following variables must be set in the global scope at this point.
 // var providers;
+// var api_errors;
 
 var INVALID_CREDENTIALS_ERROR = {
 	success: false,
@@ -41,8 +42,9 @@ module.exports = {
 						return providers.authentication.allow({user: user, success: true}, req, res);
 					});
 			},
-			function (reason) { // nonexistent user
-				return INVALID_CREDENTIALS_ERROR;
+			function (reason) {
+				if (api_errors.NonexistentUserError === reason) return INVALID_CREDENTIALS_ERROR;
+				throw reason;
 			})
 		.then(res.json.bind(res), next);
 	}
