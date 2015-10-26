@@ -8,6 +8,9 @@ Client app uses AngularJS, Bootstrap and my own dependecy-loader library to auto
 
 Para ver el archivo readme en español, ver LEEME.md
 
+[Click here to try this demo!](https://nodejsangularjsdemo-mleon.rhcloud.com)
+
+
 Features
 --------
 
@@ -60,7 +63,7 @@ or
 
     node server/server.js
 	
-then go to `http://localhost:3000` in the web browser
+then go to `http://localhost:8080` in the web browser
 
 
 Business Rules

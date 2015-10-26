@@ -6,6 +6,8 @@ Demo de aplicaciones de cliente y servidor independientes con login y CRUD de us
 La aplicación de servidor usa Express, base de datos MySQL, ORM SequelizeJS, bcrypt para el cifrado de las contraseñas y jsonwebtoken para la autenticación.
 La aplicación cliente usa AngularJS, Bootstrap y mi propia libraría dependecy-loader para agregar etiquetas de script automáticamente.
 
+[Haz click aquí para probar este demo!](https://nodejsangularjsdemo-mleon.rhcloud.com)
+
 
 Características
 ---------------
@@ -59,7 +61,7 @@ o también
 
     node server/server.js
 
-Luego acceder a `http://localhost:3000` en el navegador
+Luego acceder a `http://localhost:8080` en el navegador
 
 
 Reglas de negocio
