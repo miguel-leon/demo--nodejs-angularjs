@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Demonstration of development techniques in NodeJS and AngularJS",
   "author": "Miguel Leon <miguel.e.leon.f@gmail.com>",
+  "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
     "prepare": "node server/database/migrate.js"

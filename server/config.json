@@ -5,7 +5,7 @@
     "env-host": "OPENSHIFT_NODEJS_IP"
   },
   "database": {
-    "name": "demodb",
+    "name": "nodejsangularjsdemo",
     "env-url": "OPENSHIFT_MYSQL_DB_URL",
     "options": {
       "dialect": "mysql"
