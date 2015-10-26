@@ -1,7 +1,7 @@
 {
   "server": {
     "env-port": "PORT",
-	"alt-port": 3000,
+	"alt-port": 8080,
     "env-host": "IP"
   },
   "database": {
