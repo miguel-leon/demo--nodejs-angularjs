@@ -13,7 +13,7 @@
     "url": "https://github.com/miguel-leon/demo--nodejs-angularjs.git"
   },
   "dependencies": {
-    "bcryptjs": "^2.3.0",
+    "bcrypt": "^0.8.5",
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "jsonwebtoken": "^5.0.5",

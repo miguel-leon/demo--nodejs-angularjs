@@ -3,10 +3,10 @@
 // following variables must be set in the global scope at this point.
 // var CONFIG;
 
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcrypt');
 var Promise = require('promise');
 
-var PROCESSING_ROUNDS = 8;
+var PROCESSING_ROUNDS = 10;
 
 function handler(resolve, reject){
 	return function (err, value) {
