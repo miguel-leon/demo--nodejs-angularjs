@@ -4,7 +4,7 @@ demo--nodejs-angularjs
 Demo of independent client and server apps with user login and CRUD for users using a RESTful API
 
 Server app uses Express, MySQL database, SequelizeJS ORM, bcrypt for password encryption and jsonwebtoken for authentication.
-Client app uses AngularJS, Bootstrap and my own dependecy-loader library to automatically add script tags.
+Client app uses AngularJS, Bootstrap and my own dependency-loader library to automatically add script tags.
 
 Para ver el archivo readme en español, ver LEEME.md
 
@@ -63,12 +63,16 @@ or
 
     node server/server.js
 	
-then go to `http://localhost:8080` in the web browser
+then go to `http://localhost:3000` in the web browser
 
 
 Business Rules
 --------------
 
+This demo was originally created to fulfil a prerequisite for a job interview.
+ The data model and some of the technologies used were specific requirements.
+ The fields Profile and Holding are only to demonstrate knowledge on how to deal with table relationships.
+ At the moment they don't add any business logic.
  - The logged user can't be deleted
  - The field email is unique
  - All user fields are required

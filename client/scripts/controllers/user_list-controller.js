@@ -3,10 +3,10 @@
 angular.module('Demo-NodeJS.controllers')
 
 .controller('UserListController',
-function (CONFIG, $scope, $location, $q, serverAPI, login, userHelpers, notification) {
+function ($scope, $location, $q, CONFIG, serverAPI, login, userHelpers, notification) {
 	// SET UP
 	notification.setScope($scope);
-	userHelpers.broadcast.register('UserListController', $scope); // can't get controller name from anywhere
+	userHelpers.broadcast.register('UserListController', $scope);
 	$scope.deletable = login.allowedDeletionFor;
 
 	// RUN
@@ -36,7 +36,7 @@ function (CONFIG, $scope, $location, $q, serverAPI, login, userHelpers, notifica
 	};
 
 	$scope.delete = function (index, id) {
-		if (confirm(CONFIG.NOTIFICATIONS.USER.CONFIRM_DELETION))
+		if (window.confirm(CONFIG.NOTIFICATIONS.USER.CONFIRM_DELETION))
 		serverAPI.Users.delete(id).then(
 			// success handlers
 			userHelpers.publishFromResponse.and(userHelpers.asDeleted)

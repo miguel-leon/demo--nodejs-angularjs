@@ -2,7 +2,7 @@
 
 angular.module('Demo-NodeJS.services')
 
-.factory('serverAPI', function (CONFIG, $http, $q, login, notification) {
+.factory('serverAPI', function ($http, $q, CONFIG, login, notification) {
 	var emptyPromise = $q.defer().promise;
 
 	// Caches for profiles and holdings
@@ -11,10 +11,9 @@ angular.module('Demo-NodeJS.services')
 		holdings: null
 	};
 
-	// All methods returns Promises
+	// All methods return Promises
 	return {
 		Users: {
-			// TODO: cache user list too? only if list is not modified
 			list: function () {
 				return $http.get(CONFIG.ROUTES.API.USERS, login.headersConfig())
 				.then(handleAcceptedAPIRequest, handleRejectedAPIRequest);

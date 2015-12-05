@@ -8,12 +8,12 @@ angular.module('Demo-NodeJS.directives', []);
 angular.module('Demo-NodeJS',
 	['Demo-NodeJS.controllers', 'Demo-NodeJS.services', 'Demo-NodeJS.directives', 'ngRoute']);
 
-DependencyLoader
+window.DependencyLoader
 	.paths({
 		'app': "scripts/app.js",
 		'config': "scripts/config.js",
 		'lib': "",
-		'function_chainer': "lib/function_chainer.js",
+		'function_chainer': "resources/function_chainer.js",
 
 		'controllers': "",
 		'login-controller': "scripts/controllers/login-controller.js",
@@ -33,7 +33,7 @@ DependencyLoader
 		'match_with-directive': "scripts/directives/match_with-directive.js",
 		'angular.bootstrap': function() {
 			// extracted from https://docs.angularjs.org/guide/bootstrap
-			angular.element(document).ready(function() { angular.bootstrap(document, ['Demo-NodeJS']) });
+			angular.element(document).ready(function() { angular.bootstrap(document, ['Demo-NodeJS']); });
 		}
 	})
 	.dependencies({
@@ -42,7 +42,7 @@ DependencyLoader
 		'services': ['lib', 'login-service', 'storage-service', 'server_api-service',
 			'broadcast-service', 'notification-service', 'user_helper-service'],
 		'directives': ['form_field-directive', 'match_with-directive'],
-		'app': ['controllers', 'services', 'directives'],
+		'app': ['directives', 'services', 'controllers'],
 		'angular.bootstrap': 'app'
 	})
 	.loadAll();

@@ -37,5 +37,5 @@ angular.module('Lib')
 		fun.and = and;
 		fun.or = or;
 		return fun;
-	}
+	};
 });

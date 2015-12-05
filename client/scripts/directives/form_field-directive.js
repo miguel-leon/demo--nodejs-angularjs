@@ -1,85 +1,151 @@
-'use strict';
+(function () {'use strict';
 
 angular.module('Demo-NodeJS.directives')
 
-.directive('validatedFormGroup', function ($compile) {
-	var required = ['id', 'name', 'model', 'label'];
-
+.directive('formGroup', function () { // before transclusion
 	return {
-		restrict: 'E',
-		require: '^form',
-		transclude: true,
-		templateUrl: 'templates/directives/validated-form-group.html',
+		priority: 1,
 		compile: function (tElement, tAttrs) {
-			var formName = getFormName(tElement.parent());
-			var field = formName + "." + tAttrs.name;
-			var andTouchedOrSubmitted = " && (" + field + ".$touched || " + formName + ".$submitted)";
+			tElement.addClass('form-group');
 
-			var attrs = tElement[0].attributes;
-			tElement = angular.element(tElement.children()[0]);
-			setAttrsTo(tElement, attrs, required);
-			var errClass = tElement.attr('err-class');
+			var tField = tElement.find('input');
+			if (!tField.length) tField = tElement.find('select');
+			if (tField.length) {
+				if (!tField.attr('name')) tField.attr('name', tField.attr('id'));
+				tField.addClass('form-control');
+				tAttrs.name = tField.attr('name');
+			}
+		},
+		controller: function ($attrs) {
+			this.getFieldName = function () {
+				return $attrs.name;
+			};
+		}
+	};
+})
 
-			tElement.attr('ng-class',
-			"{" +
-				"'" + errClass + "': " + field + ".$invalid" + andTouchedOrSubmitted +
-			"}");
+.directive('formGroup', function () {
+	function col(n) { return 'col-sm-'+n; }
+	return {
+		restrict: 'A',
+		transclude: true,
+		scope: false,
+		compile: function (tElement, tAttrs) {
+			if (tAttrs.label) {
+				var tLabel = angular.element('<label class="control-label">'+ tAttrs.label +'</label>');
+				if (tAttrs.formGroup) tLabel.addClass(col(12 - tAttrs.formGroup));
+				tElement.append(tLabel);
+			}
+			/* jshint unused:true */
+			return function link(scope, iElement, iAttrs, _, transclude) {
+				transclude(scope, function (clone) {
+					var container = iElement;
+					if (iAttrs.formGroup) {
+						container = angular.element('<div></div>');
+						container.addClass(col(iAttrs.formGroup));
+						iElement.append(container);
+					}
+					container.append(clone);
+				});
 
-			var elemLabel = tElement.find('label');
-			elemLabel.attr('for', tAttrs.name);
-			elemLabel.append(tAttrs.label);
+				if (tLabel) {
+					var iField = tLabel.next();
+					if (iField.attr('id')) tLabel.attr('for', iField.attr('id'));
+				}
+			};
+			/* jshint unused:strict */
+		}
+	};
+})
 
-			var elemTransclude = tElement.find('ng-transclude');
-			var relemField = elemTransclude.children()[0];
-			var elemHint = angular.element(elemTransclude.children()[1]);
+.directive('validate', function (ngClassDirective) {
+	return {
+		restrict: 'A',
+		require: ['^form', 'formGroup', 'validate'],
+		scope: true,
+		link: function(scope, iElement, iAttrs, controllers) {
+			var formCtrl = controllers[0];
+			var formGroupCtrl = controllers[1];
+			var validateCtrl = controllers[2];
 
-			return function link(scope, iElement, iAttrs) {
-				var elemTransclude = tElement.find('ng-transclude');
-				var elemField = angular.element(elemTransclude.children()[0]);
-				setAttrsTo(elemField, relemField.attributes);
-				elemField.attr('id', tAttrs.id);
-				elemField.attr('name', tAttrs.name);
-				elemField.attr('ng-model', tAttrs.model);
-
-				var elemErrors = iElement.children().find('errors');
-				if (elemErrors.length) replaceErrorElements(elemErrors.children(), elemHint);
-				elemErrors.replaceWith(elemErrors.children());
-
-				elemTransclude.replaceWith(elemTransclude.children());
-
-				//console.log(iElement.html());
-				var iElementChildren = iElement.children();
-				iElement.replaceWith(iElementChildren);
-
-				$compile(iElementChildren)(scope);
+			scope.showValidation = validateCtrl.showValidation = function() {
+				var formField = formCtrl[formGroupCtrl.getFieldName()];
+				return formField && (formField.$touched || formCtrl.$submitted);
 			};
 
-			function replaceErrorElements(errors, replacement) {
-				for (var i = 0; i < errors.length; ++i) {
-					var elemError = angular.element(errors[i]);
-					var on = elemError.attr('on');
-					on = on? "." + on: "";
-					var newErrorElem = replacement.clone();
-					newErrorElem.attr('ng-if', field + ".$error" + on + andTouchedOrSubmitted);
-					newErrorElem.append(elemError.contents());
-					elemError.replaceWith(newErrorElem);
-				}
+			iAttrs.ngClass = "{'has-error': showValidation() && " +
+				formCtrl.$name + "." + formGroupCtrl.getFieldName() + ".$invalid}";
+			ngClassDirective[0].link(scope, iElement, iAttrs);
+		},
+		controller: function () { /* needed for directives that require it */ }
+	};
+})
+
+
+.directive('invalidation', function () {
+	return {
+		require: ['^form', '^formGroup', '?^validate'],
+		template: '<p class="help-block" ng-if="hasError()" ng-transclude></p>',
+		transclude: true,
+		scope: true,
+		/* jshint unused:true */
+		link: function (scope, iElement, iAttrs, controllers) {
+			var formCtrl = controllers[0];
+			var formGroupCtrl = controllers[1];
+			var validateCtrl = controllers[2];
+
+			if (!validateCtrl) {
+				scope.hasError = function () {
+					return false;
+				};
+			}
+			else {
+				scope.hasError = function () {
+					return validateCtrl.showValidation() &&
+						formCtrl[formGroupCtrl.getFieldName()].$error[iAttrs.invalidation];
+				};
 			}
 		}
 	};
+	/* jshint unused:strict */
+})
 
-	function getFormName(element) {
-		if (element[0].tagName == 'FORM') return element.attr('name');
-		return getFormName(element.parent());
-	}
-
-	function setAttrsTo(element, attrs, excluded) {
-		for (var i = 0; i < attrs.length; ++i) {
-			if (excluded && excluded.indexOf(attrs[i].name) >= 0) continue;
-			if (attrs[i].name == 'class') element.addClass(attrs[i].value);
-			else element.attr(attrs[i].name, attrs[i].value);
+.directive('placeholderOption', function () {
+	return {
+		priority: 1,
+		restrict: 'A',
+		compile: function (tElement, tAttrs) {
+			tElement.prepend('<option value="" class="hidden disabled">' +
+				(tAttrs.placeholderOption || 'Select one') + '</option>');
 		}
-	}
+	};
+})
 
+.directive('parserNames', function () {
+	return {
+		restrict: 'A',
+		require: 'ngModel',
+		/* jshint unused:true */
+		link: function (scope, iElement, iAttrs, ngModel) {
+			iAttrs.ngTrim = 'false';
+			ngModel.$parsers.push(function (value) {
+				var newval = value.replace(/^\s+/, '').replace(/\s+/g, ' ').split('').filter(function (c) {
+					return isLetter(c) || /[ '-]/.test(c);
+				}).join('');
+				if (value !== newval) {
+					ngModel.$setViewValue(newval);
+					ngModel.$render();
+				}
+				return newval;
+			});
 
+			function isLetter(c) {
+				return angular.uppercase(c) !== angular.lowercase(c);
+			}
+		}
+	};
+	/* jshint unused:strict */
 });
+
+})();
+

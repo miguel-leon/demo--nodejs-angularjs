@@ -22,6 +22,10 @@ angular.module('Demo-NodeJS')
 		TEMPLATES.NOTIFICATION = {
 			ALERT: '/templates/partials/alert-notification.html'
 		};
+		TEMPLATES.VALIDATION_MESSAGES = {
+			FIELD_REQUIRED: 'messages.fieldRequired',
+			EMAIL: 'messages.email'
+		};
 
 		var NOTIFICATION_CLASS = { // css classes
 			SUCCESS: 'alert-success',
@@ -119,4 +123,13 @@ angular.module('Demo-NodeJS')
 				}
 			}
 		};
-})());
+})())
+
+.run(function($templateCache, $rootScope, CONFIG) {
+	$templateCache.put(CONFIG.TEMPLATES.VALIDATION_MESSAGES.FIELD_REQUIRED,
+		'<div invalidation="required">This field is required</div>');
+	$templateCache.put(CONFIG.TEMPLATES.VALIDATION_MESSAGES.EMAIL,
+		'<div invalidation="email">Enter a valid email</div>');
+
+	$rootScope.VALIDATION_MESSAGES = CONFIG.TEMPLATES.VALIDATION_MESSAGES;
+});

@@ -3,15 +3,14 @@
 angular.module('Demo-NodeJS.controllers')
 
 .controller('UserController',
-function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login, notification) {
+function ($scope, $location, $routeParams, CONFIG, serverAPI, userHelpers, login, notification) {
 	// SET UP
 	notification.setScope($scope);
-	userHelpers.broadcast.register('UserController', $scope); // can't get controller name from anywhere
+	userHelpers.broadcast.register('UserController', $scope);
 
 	var redirectToUserList = function () { $location.path(CONFIG.ROUTES.APP.USER_LIST); };
-	var conditionalRedirect = login.hasCredentials()?
-		redirectToUserList:
-		function () { $location.path(CONFIG.ROUTES.APP.LOGIN); };
+	var conditionalRedirect = login.hasCredentials() ?
+		redirectToUserList: function () { $location.path(CONFIG.ROUTES.APP.LOGIN); };
 
 	// RUN
 	// unauthorized or unknown failures, handled by server api service
@@ -27,14 +26,16 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 	}
 	else { // existing user
 		$scope.new_user = false;
-		if ($routeParams.id != $scope.user.id) { // manually changed id in url
+		if ($routeParams.id !== $scope.user.id) { // manually changed id in url
 			serverAPI.Users.find($routeParams.id).then(
 				userHelpers.publishFromResponse, // success handler
 				userHelpers.isNonexistent.and(conditionalRedirect)); // failure handler
 		}
+		/* jshint -W084 */
 		if ($scope.deletable = login.allowedDeletionFor($routeParams.id)) {
 			$scope.delete = deleteUser; // function for button, function hoisted
 		}
+		/* jshint +W084 */
 		$scope.save = modifyUser; // function for button, function hoisted
 	}
 
@@ -57,7 +58,6 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 		if ($scope.userForm.$invalid) return;
 		serverAPI.Users.modify($scope.user).then(
 			// success handlers
-			//userHelpers.modifyLoggedUser.or
 			userHelpers.checkIfModifiedLoggedUser.and
 			(userHelpers.publishFromResponse.and(userHelpers.asModified).and(redirectToUserList)),
 			// failure handlers
@@ -66,7 +66,7 @@ function (CONFIG, $scope, $location, $routeParams, serverAPI, userHelpers, login
 	}
 
 	function deleteUser() {
-		if (confirm(CONFIG.NOTIFICATIONS.USER.CONFIRM_DELETION))
+		if (window.confirm(CONFIG.NOTIFICATIONS.USER.CONFIRM_DELETION))
 		serverAPI.Users.delete($scope.user.id).then(
 			// success handlers
 			userHelpers.publishFromResponse.and(userHelpers.asDeleted).and(redirectToUserList),

@@ -2,7 +2,7 @@
 
 angular.module('Demo-NodeJS.controllers')
 
-.controller('LoginController', function (CONFIG, userHelpers, $scope, $location, login, notification) {
+.controller('LoginController', function ($scope, $location, CONFIG, userHelpers, login, notification) {
 	// Set up
 	notification.setScope($scope);
 	$scope.user = {}; // no need to register this controller with userHelpers.broadcast
@@ -16,7 +16,7 @@ angular.module('Demo-NodeJS.controllers')
 	$scope.login = function () {
 		if ($scope.loginForm.$invalid) return;
 		login.attempt($scope.user).then(
-			function (response) { // success
+			function () { // success
 				$location.path(CONFIG.ROUTES.AUTHENTICATED_ENTRY);
 			},
 			function (reason) { // failure

@@ -9,11 +9,12 @@ angular.module('Demo-NodeJS.directives')
 		scope: {
 			otherModel: "=matchWith"
 		},
+		/* jshint unused:true */
 		link: function(scope, element, attributes, ngModel) {
 			if (!ngModel) return;
 
 			ngModel.$validators.match = function(model) {
-				return model == scope.otherModel;
+				return !model || model === scope.otherModel;
 			};
 
 			scope.$watch("otherModel", function() {
@@ -21,4 +22,5 @@ angular.module('Demo-NodeJS.directives')
 			});
 		}
 	};
+	/* jshint unused:strict */
 });

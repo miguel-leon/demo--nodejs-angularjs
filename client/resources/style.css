@@ -1,0 +1,16 @@
+select.form-control.ng-invalid, select:first-child {
+	color: #999999;
+}
+select.form-control.ng-valid, select.form-control > option {
+	color: #333;
+}
+select.form-control {
+	padding-left: 10px;
+}
+.vspace {
+	margin-bottom: 50px;
+}
+.sidespace {
+	padding-left: 20px;
+	padding-right: 30px;
+}
