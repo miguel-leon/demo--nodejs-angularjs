@@ -4,26 +4,21 @@
 
 <form class="form-horizontal" name="loginForm" role="form" novalidate>
 
-	<validated-form-group id="email" name="email" model="user.email" label="Email:">
-		<input type="email" placeholder="Enter email" required>
-		<errors>
-			<error on="email">A valid email is required</error>
-		</errors>
-	</validated-form-group>
+	<div form-group="10" label="Email:" validate>
+		<input type="email" id="email" placeholder="Enter email" ng-model="user.email" required>
+		<div invalidation="required">Please enter your email</div>
+		<ng-include src="VALIDATION_MESSAGES.EMAIL"></ng-include>
+	</div>
 
-	<validated-form-group id="password" name="password" model="user.password" label="Password:">
-		<input type="password" placeholder="Enter password" required>
-		<errors>
-			<error on="required">A password is required</error>
-		</errors>
-	</validated-form-group>
+	<div form-group="10" label="Password:" validate>
+		<input type="password" id="password" placeholder="Enter password" ng-model="user.password" required>
+		<div invalidation="required">Please enter your password</div>
+	</div>
 
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
-			<button type="submit" class="btn btn-primary btn-lg" ng-click="login()">
-				Log in</button>
-			<button type="button" class="btn btn-default btn-lg" ng-click="register()">
-				Register user</button>
+			<button type="submit" class="btn btn-primary btn-lg" ng-click="login()">Log in</button>
+			<button type="button" class="btn btn-default btn-lg" ng-click="register()">Register user</button>
 		</div>
 	</div>
 </form>

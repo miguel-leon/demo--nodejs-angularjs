@@ -2,16 +2,17 @@
  * Dependency Loader - version 2.2
  * (c) Miguel Leon. 2014.
  */
-var DependencyLoader = new (function (document) {'use strict';
+/* jshint -W057 */
+window.DependencyLoader = new (function (document) {'use strict';
 	var _readystates = {}; // undefined: unverified; false: loading; true: loaded. For external scripts.
 	var _paths = {};
 	var _dependencies = {};
 	var _scripts = {};
 
 	this.paths = function(paths) {
-		if (objectType.call(paths) != '[object Object]') throw badObjectError;
+		if (objectType.call(paths) !== '[object Object]') throw badObjectError;
 		Object.keys(paths).forEach(function(id) {
-			if (typeof paths[id] != 'string' && typeof paths[id] != 'function') throw badPathTypeErrorFor(id);
+			if (typeof paths[id] !== 'string' && typeof paths[id] !== 'function') throw badPathTypeErrorFor(id);
 		});
 
 		_paths = paths;
@@ -19,14 +20,14 @@ var DependencyLoader = new (function (document) {'use strict';
 	};
 
 	this.dependencies = function(dependencies) {
-		if (objectType.call(dependencies) != '[object Object]') throw badObjectError;
+		if (objectType.call(dependencies) !== '[object Object]') throw badObjectError;
 		Object.keys(dependencies).forEach(function(id) {
-			if (typeof dependencies[id] == 'string') dependencies[id] = [dependencies[id]];
+			if (typeof dependencies[id] === 'string') dependencies[id] = [dependencies[id]];
 			else {
-				if (objectType.call(dependencies[id]) != '[object Array]') throw badDependencyTypeErrorFor(id);
-				if (dependencies[id].length == 0) delete dependencies[id];
+				if (objectType.call(dependencies[id]) !== '[object Array]') throw badDependencyTypeErrorFor(id);
+				if (dependencies[id].length === 0) delete dependencies[id];
 				else dependencies[id].forEach(function(id) {
-					if (typeof id != 'string') throw badIdTypeError;
+					if (typeof id !== 'string') throw badIdTypeError;
 				});
 			}
 		});
@@ -36,7 +37,7 @@ var DependencyLoader = new (function (document) {'use strict';
 	};
 
 	this.load = function(id) {
-		if (typeof id != 'string') throw badIdTypeError;
+		if (typeof id !== 'string') throw badIdTypeError;
 		if (!(id in _paths)) throw badIdErrorFor(id);
 
 		nonCircularValidation(id, {});
@@ -50,7 +51,7 @@ var DependencyLoader = new (function (document) {'use strict';
 	};
 
 	this.asyncRequire = function(src, callback) {
-		if (typeof src != 'string') throw badPathTypeErrorFor('src');
+		if (typeof src !== 'string') throw badPathTypeErrorFor('src');
 
 		addScriptTag(src, undefined, callback);
 	};
@@ -60,7 +61,7 @@ var DependencyLoader = new (function (document) {'use strict';
 		if (!(id in _paths)) throw badIdErrorFor(id);
 		var path = _paths[id];
 		var loadThis = function() {
-			if (typeof path == 'function') {
+			if (typeof path === 'function') {
 				// function dependencies might get executed multiple times in contrast to external scripts.
 				setTimeout(function(){
 					path();
@@ -85,7 +86,7 @@ var DependencyLoader = new (function (document) {'use strict';
 				_dependencies[id].forEach(function(dependencyId) {
 					loadAsynchronously(dependencyId, function() {
 						dependencies_remaining--;
-						if (dependencies_remaining == 0) loadThis();
+						if (dependencies_remaining === 0) loadThis();
 					});
 				});
 			}
@@ -127,21 +128,23 @@ var DependencyLoader = new (function (document) {'use strict';
 
 	function findRoots() {
 		var roots = {};
-		Object.keys(_paths).forEach(function(id) { roots[id] = true }); // populating roots.
+		Object.keys(_paths).forEach(function(id) { roots[id] = true; }); // populating roots.
 		var nodes = {};
 
-		for (var id in roots) { nonCircularValidation(id, nodes, roots); }
-		return Object.keys(roots);
+		var ids = Object.keys(roots);
+		ids.forEach(function (id) { nonCircularValidation(id, nodes, roots); });
+		return ids;
 	}
 
 	// ERROR MESSAGES
 	var circularDependencyError = 'Circular dependency found!';
 	var badIdTypeError = 'Dependency identifier is not a string!';
 	var badObjectError = 'Argument is not an object!';
-	function badPathTypeErrorFor(id) { return 'Path for "' + id + '" is not a string or a function!' }
-	function badDependencyTypeErrorFor(id) { return 'Dependencies for "' + id + '" are not an array or a string!' }
-	function badIdErrorFor(id) { return 'Path or function for dependency "' + id + '" not found!' }
+	function badPathTypeErrorFor(id) { return 'Path for "' + id + '" is not a string or a function!'; }
+	function badDependencyTypeErrorFor(id) { return 'Dependencies for "' + id + '" are not an array or a string!'; }
+	function badIdErrorFor(id) { return 'Path or function for dependency "' + id + '" not found!'; }
 
 	// OBJECT TYPE CHECKING
 	var objectType = {}.toString;
 })(document);
+/* jshint +W057 */

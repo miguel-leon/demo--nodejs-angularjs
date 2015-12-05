@@ -24,16 +24,22 @@ angular.module('Demo-NodeJS.services')
 	 * @param {Array.<String>} keys the broadcast works for
 	 */
 	function Broadcast(keys) {
+		function Item(key, value) {
+			this.key = key;
+			this.value = value;
+		}
+		Item.prototype.broadcast = this; // back reference
+		Item.prototype.publish = function (value) { // function to publish a new value
+			this.value = value;
+			angular.forEach(this.broadcast.scopes, function (scope) { // for each scope, update the key
+				scope[this.key] = value;
+			}, this);
+		};
+
 		this.scopes = {}; // scopes registered
 		this.keys = keys; // keys available for broadcasting
-		var keyPrototype = {
-			publish: publish, // function to publish a new value
-			broadcast: this // back reference
-		};
 		keys.forEach(function (key) {
-			this[key] = Object.create(keyPrototype);
-			this[key].key = key; // key to be broadcasted
-			this[key].value = null; // value to be broadcasted
+			this[key] = new Item(key, null);
 		}, this);
 	}
 
@@ -43,14 +49,6 @@ angular.module('Demo-NodeJS.services')
 			scope_obj[key] = this[key].value;
 		}, this);
 	};
-
-	function publish(value) {
-		this.value = value;
-		for (var scope_name in this.broadcast.scopes) { // for each scope, update the key
-			//noinspection JSUnfilteredForInLoop
-			this.broadcast.scopes[scope_name][this.key] = value;
-		}
-	}
 
 	return Broadcast;
 });

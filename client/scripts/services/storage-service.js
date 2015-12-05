@@ -23,5 +23,5 @@ angular.module('Demo-NodeJS.services')
 		getJSON: function (key) {
 			return JSON.parse($window.sessionStorage[key]);
 		}
-	}
+	};
 });

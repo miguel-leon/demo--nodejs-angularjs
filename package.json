@@ -6,7 +6,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "prepare": "node server/database/migrate.js"
+	"prepare": "node server/database/migrate.js"
   },
   "repository": {
     "type": "git",

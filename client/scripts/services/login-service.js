@@ -2,7 +2,7 @@
 
 angular.module('Demo-NodeJS.services')
 
-.factory('login', function (CONFIG, $http, $q, $location, storage) {
+.factory('login', function ($http, $q, $location, CONFIG, storage) {
 	return {
 		saveAuthenticationFrom: saveAuthenticationFrom,
 		/**
@@ -33,7 +33,9 @@ angular.module('Demo-NodeJS.services')
 		 * @returns {boolean}
 		 */
 		allowedDeletionFor: function (id) {
+			/* jshint -W116 */ //intentional coercion
 			return id != loggedUser().id;
+			/* jshint +W116 */
 		},
 
 		headersConfig: function () {

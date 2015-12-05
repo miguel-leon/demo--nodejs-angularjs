@@ -48,10 +48,9 @@ module.exports = {
 		.then(stripPasswordFromUserResponse)
 		.then(makeSuccessJSONResponseForUser, rejectionHandler)
 		.then(function(json) {
-				res.status(201);
+				if (json.user) res.status(201);
 				res.json(json);
-			},
-			next);
+			}, next);
 	},
 	/**
 	 * Middleware for modifying an existing user.
@@ -92,12 +91,12 @@ module.exports = {
 				return providers.database.Users.update(user);
 			})
 		.then(stripPasswordFromUserResponse)
-		.then(makeSuccessJSONResponseForUser, rejectionHandler)
+		.then(makeSuccessJSONResponseForUser)
 		.then(function checkIfUpdatedLoggedUser(json) { // check if updated logged user
 				if (providers.authentication.isAuthenticated(json.user.id, req, res))
 					return providers.authentication.allow(json, req, res); // regenerate authentication
 				return json;
-			})
+			}, rejectionHandler)
 		.then(res.json.bind(res), next);
 	},
 	/**

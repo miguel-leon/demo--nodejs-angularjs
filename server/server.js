@@ -39,7 +39,7 @@ app.use('/api', require('./api/routes'));
  * required in order to keep the client and server applications independent from each other,
  * without the server application having any knowledge of the routes of the client application.
  */
-app.use(/[\s\S]*/, function (req, res) {
+app.use(/^([^.]+)$/, function (req, res) {
 	res.sendFile(path.join(clientDir, '/index.html'));
 });
 /*
