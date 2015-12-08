@@ -12,18 +12,12 @@ angular.module('Demo-NodeJS.services')
 		publishFromResponse: publishFromResponseFunctionFor('user'),
 		publishProfilesFromResponse: publishFromResponseFunctionFor('profiles'),
 		publishHoldingsFromResponse: publishFromResponseFunctionFor('holdings'),
-		modifyLoggedUser: functionChainer(function (data) { // not used
-			if (data.user.id === login.loggedUser().id) {
-				notification.push(CONFIG.NOTIFICATIONS.USER.MODIFIED_LOGGED);
-				login.dismiss();
-				return true;
-			}
-			return false;
-		}),
 		checkIfModifiedLoggedUser: functionChainer(function (data) {
-			if (data.user.id === login.loggedUser().id) {
+			/* jshint -W116 */ // Intentional coercion
+			if (data.user.id == login.loggedUser().id) {
 				login.saveAuthenticationFrom(data);
 			}
+			/* jshint +W116 */
 		}),
 		// the following functions are used for pushing notifications.
 		asCreated: pushNotificationFunction(CONFIG.NOTIFICATIONS.USER.CREATED),

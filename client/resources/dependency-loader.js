@@ -69,7 +69,7 @@ window.DependencyLoader = new (function (document) {'use strict';
 				}, 0);
 			}
 			else {
-				if (path === "") _readystates[id] = true;
+				if (path === '') _readystates[id] = true;
 				if (id in _readystates) {
 					if (callback) {
 						if (_readystates[id]) setTimeout(callback, 0);
