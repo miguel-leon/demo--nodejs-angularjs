@@ -26,11 +26,13 @@ function ($scope, $location, $routeParams, CONFIG, serverAPI, userHelpers, login
 	}
 	else { // existing user
 		$scope.new_user = false;
-		if ($routeParams.id !== $scope.user.id) { // manually changed id in url
+		/* jshint -W116 */ // intentional coercion
+		if ($routeParams.id != $scope.user.id) { // manually changed id in url
 			serverAPI.Users.find($routeParams.id).then(
 				userHelpers.publishFromResponse, // success handler
 				userHelpers.isNonexistent.and(conditionalRedirect)); // failure handler
 		}
+		/* jshint +W116 */
 		/* jshint -W084 */
 		if ($scope.deletable = login.allowedDeletionFor($routeParams.id)) {
 			$scope.delete = deleteUser; // function for button, function hoisted

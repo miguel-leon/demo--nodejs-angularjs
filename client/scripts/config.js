@@ -110,16 +110,11 @@ angular.module('Demo-NodeJS')
 						message: 'Cannot delete current logged user.',
 						class: NOTIFICATION_CLASS.ERROR
 					},
-					MODIFIED_LOGGED: { // not used
-						message: 'The logged user has been successfully modified. Please log in again.',
-						class: NOTIFICATION_CLASS.SUCCESS
-					},
 					INVALID_PASSWORD: {
 						message: 'The previous password is invalid.',
 						class: NOTIFICATION_CLASS.ERROR
 					},
-					CONFIRM_DELETION: 'Sure you want to delete this user?',
-					CONFIRM_LOGGED_MODIFICATION: 'Sure you want to modify the logged user?' // not used
+					CONFIRM_DELETION: 'Sure you want to delete this user?'
 				}
 			}
 		};
